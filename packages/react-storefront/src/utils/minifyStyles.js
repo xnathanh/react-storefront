@@ -4,10 +4,14 @@
  */
 
 /**
- * This used to use clean-css to minify styles, but we found that it had a really slow
- * initialization time that added significantly to server sync js times (wp).  So we removed
- * it, but left this stub in case anything was calling it.
+ * Add prefixes and minify given CSS
  */
 export default async function minifyStyles(css) {
-  return css
+  const postcss = require('postcss')
+  const autoprefixer = require('autoprefixer')
+  const CleanCSS = require('clean-css')
+  const prefixer = postcss([autoprefixer])
+  const cleanCSS = new CleanCSS()
+  const prefixed = await prefixer.process(css, { from: undefined })
+  return cleanCSS.minify(prefixed.css).styles
 }
