@@ -22,6 +22,7 @@ import { renderAmpAnalyticsTags } from './Track'
 import { ROUTES } from './router/headers'
 import flattenDeep from 'lodash/flattenDeep'
 import requestContext from './requestContext'
+import './utils/profile'
 
 /**
  * A request handler for the server.
@@ -61,34 +62,36 @@ export default class Server {
    * Handles an isomorphic request by serving json, html, or amp content based on the URL.
    */
   serve = async (request, response) => {
-    console.error = console.error || console.log
-    console.warn = console.warn || console.log
+    return profile('timing-serve', async () => {
+      console.error = console.error || console.log
+      console.warn = console.warn || console.log
 
-    const history = createMemoryHistory({ initialEntries: [request.path + request.search] })
+      const history = createMemoryHistory({ initialEntries: [request.path + request.search] })
 
-    if (request.headers.get(ROUTES)) {
-      return response.json(this.router.routes.map(route => route.path.spec))
-    }
-
-    let state
-
-    const reportError = error => {
-      this.errorReporter({ error, history, app: state })
-    }
-
-    try {
-      this.router.on('error', reportError)
-      state = await this.router.runAll(request, response)
-
-      if (!state.proxyUpstream && !response.headersSent) {
-        await this.renderPWA({ request, response, state, history })
+      if (request.headers.get(ROUTES)) {
+        return response.json(this.router.routes.map(route => route.path.spec))
       }
-    } catch (e) {
-      reportError(e)
-      await this.renderError(e, request, response, history)
-    } finally {
-      this.router.off('error', this.errorReporter)
-    }
+
+      let state
+
+      const reportError = error => {
+        this.errorReporter({ error, history, app: state })
+      }
+
+      try {
+        this.router.on('error', reportError)
+        state = await this.router.runAll(request, response)
+
+        if (!state.proxyUpstream && !response.headersSent) {
+          await this.renderPWA({ request, response, state, history })
+        }
+      } catch (e) {
+        reportError(e)
+        await this.renderError(e, request, response, history)
+      } finally {
+        this.router.off('error', this.errorReporter)
+      }
+    })
   }
 
   /**
@@ -149,21 +152,23 @@ export default class Server {
     try {
       const stats = await getStats()
 
-      let html = renderHtml({
-        component: (
-          <PWA>
-            <App />
-          </PWA>
-        ),
-        providers: {
-          app: model,
-          history,
-          analytics: {},
-          router: this.router
-        },
-        registry: sheetsRegistry,
-        theme
-      })
+      let html = await profile('timing-renderHtml', () =>
+        renderHtml({
+          component: (
+            <PWA>
+              <App />
+            </PWA>
+          ),
+          providers: {
+            app: model,
+            history,
+            analytics: {},
+            router: this.router
+          },
+          registry: sheetsRegistry,
+          theme
+        })
+      )
 
       const helmet = Helmet.renderStatic()
 
