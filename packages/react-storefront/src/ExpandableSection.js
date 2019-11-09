@@ -263,4 +263,5 @@ class ExpandableSection extends Component {
   }
 }
 
+// eslint-disable-next-line react-storefront-internal/no-calls-in-module-scope
 export default withAccordionContext(ExpandableSection)

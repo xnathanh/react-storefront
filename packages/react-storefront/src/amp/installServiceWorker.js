@@ -6,6 +6,7 @@ import registerServiceWorker from '../registerServiceWorker'
 import { prefetch, waitForServiceWorkerController } from '../router/serviceWorker'
 import qs from 'qs'
 
+// eslint-disable-next-line react-storefront-internal/no-calls-in-module-scope
 waitForServiceWorkerController().then(() => {
   if (window.location.search.length) {
     const { preload } = qs.parse(window.location.search, { ignoreQueryPrefix: true })
@@ -20,4 +21,5 @@ waitForServiceWorkerController().then(() => {
   }
 })
 
+// eslint-disable-next-line react-storefront-internal/no-calls-in-module-scope
 registerServiceWorker()

@@ -22,6 +22,7 @@ if (!window.moov) {
 // request header in router/fromServer
 window.moov.apiVersion = __build_timestamp__
 
+// eslint-disable-next-line react-storefront-internal/no-calls-in-module-scope
 const isLocalhost = Boolean(
   window.location.hostname === 'localhost' ||
     // [::1] is the IPv6 localhost address.

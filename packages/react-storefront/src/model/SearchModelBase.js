@@ -8,6 +8,7 @@ import { types } from 'mobx-state-tree'
 import { fetchLatest, StaleResponseError } from '../fetchLatest'
 
 // Ensures that responses are returned in order and that the previous request is canceled when a new request is sent.
+// eslint-disable-next-line react-storefront-internal/no-calls-in-module-scope
 const fetchSearchResults = fetchLatest(fetch)
 
 /**

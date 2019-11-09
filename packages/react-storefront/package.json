@@ -21,7 +21,8 @@
     "build:sources": "babel ./src --source-maps --out-dir dist",
     "watch": "yarn build:prep && concurrently 'yarn build:assets --watch' 'yarn build:sources --watch'",
     "docs": "mkdir -p docs/build && PRESERVE_MARKDOWN=true NODE_ENV=docs babel-node docs/buildDocs d.js",
-    "link": "yarn build; cd dist; npm link; yarn link; cd ..;"
+    "link": "yarn build; cd dist; npm link; yarn link; cd ..;",
+    "lint": "eslint src"
   },
   "peerDependencies": {
     "@material-ui/core": "^3.8.1",

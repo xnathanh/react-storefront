@@ -34,4 +34,6 @@ import { createContext } from 'react'
  *  }
  * ```
  */
+
+// eslint-disable-next-line react-storefront-internal/no-calls-in-module-scope
 export default createContext()

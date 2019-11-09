@@ -15,8 +15,6 @@ import classnames from 'classnames'
 import { inject, observer } from 'mobx-react'
 import AmpCarousel from './amp/AmpCarousel'
 
-const AutoPlaySwipeableViews = autoPlay(SwipeableViews)
-
 export const styles = theme => ({
   root: {
     display: 'flex',
@@ -92,6 +90,8 @@ export const styles = theme => ({
   }
 })
 
+let AutoPlaySwipeableViews
+
 @withStyles(styles, { name: 'RSFCarousel' })
 @inject('app')
 @observer
@@ -162,6 +162,13 @@ export default class Carousel extends Component {
   }
 
   state = {}
+
+  constructor() {
+    super()
+    if (!AutoPlaySwipeableViews) {
+      AutoPlaySwipeableViews = autoPlay(SwipeableViews)
+    }
+  }
 
   componentWillUnmount() {
     if (this.disposeReaction) {
