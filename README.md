@@ -74,6 +74,12 @@ yarn release
 
 ## Changelog
 
+### 6.63.0
+
+- Optimized css minification to reduce request handling time.
+- Optimized generating links for SEO in Menu.
+- Production server build now uses terser.
+
 ### 6.62.2
 
 - Fixes metadata for analytics events that have no arguments

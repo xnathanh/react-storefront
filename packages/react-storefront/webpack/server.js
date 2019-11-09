@@ -1,10 +1,7 @@
 const path = require('path')
-const {
-  createServerConfig,
-  createLoaders,
-  optimization,
-  injectBuildTimestamp
-} = require('./common')
+const { createServerConfig, createLoaders, injectBuildTimestamp } = require('./common')
+
+const createOptimization = require('./optimization')
 const merge = require('lodash/merge')
 const FilterWarningsPlugin = require('webpack-filter-warnings-plugin')
 
@@ -107,7 +104,7 @@ module.exports = {
         resolve,
         mode: 'production',
         devtool: 'source-map',
-        optimization,
+        optimization: createOptimization({ production: true }),
         module: {
           rules: createLoaders(root, {
             envName: 'production-server',

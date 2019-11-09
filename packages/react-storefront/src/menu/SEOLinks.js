@@ -4,8 +4,8 @@
  */
 import React, { Component, Fragment } from 'react'
 import { inject } from 'mobx-react'
-import Link from '../Link'
 import NoScript from '../NoScript'
+import { absoluteURL } from '../utils/url'
 
 @inject('app')
 export default class SEOLinks extends Component {
@@ -28,9 +28,9 @@ export default class SEOLinks extends Component {
 
         if (item.url) {
           links.push(
-            <Link key={key++} to={item.url}>
+            <a key={key++} href={absoluteURL(item.url)}>
               {item.text}
-            </Link>
+            </a>
           )
         }
 
@@ -44,14 +44,6 @@ export default class SEOLinks extends Component {
 
     return (
       <Fragment>
-        {/* 
-        React doesn't execute the children of a noscript on the client, 
-        therefore the style rules for Link will get written out of order
-        unless we force a Link to render here.
-        */}
-        <div style={{ display: 'none' }}>
-          <Link />
-        </div>
         <NoScript>
           <nav
             style={{
