@@ -74,6 +74,10 @@ yarn release
 
 ## Changelog
 
+### 6.64.0
+
+- Adds the ability to cache routes with a `fromOrigin` handler.
+
 ### 6.63.0
 
 - Optimized css minification to reduce request handling time.
