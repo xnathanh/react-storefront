@@ -74,6 +74,10 @@ yarn release
 
 ## Changelog
 
+### 6.64.0
+
+- Added `additionalDelay` option to launch client to further delay hydration after page load.
+
 ### 6.63.0
 
 - Optimized css minification to reduce request handling time.
