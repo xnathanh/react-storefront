@@ -74,6 +74,10 @@ yarn release
 
 ## Changelog
 
+### 6.64.1
+
+- Fixes `additionalDelay` bug which caused hydration before load
+
 ### 6.64.0
 
 - Adds the ability to cache routes with a `fromOrigin` handler.
