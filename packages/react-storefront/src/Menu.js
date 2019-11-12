@@ -23,7 +23,7 @@ export const styles = theme => ({
     display: 'flex',
     flexDirection: 'column',
     borderTop: `${theme.headerHeight}px solid transparent`,
-    overflowX: 'hidden',
+    overflowX: 'hidden', // prevents horizontal scroll
     'body.moov-safari &': {
       // Turning off momentum scrolling on iOS here to fix frozen body issue
       // Source: https://moovweb.atlassian.net/browse/PRPL-342
