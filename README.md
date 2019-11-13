@@ -77,6 +77,9 @@ yarn release
 ### 6.65.0
 
 - The service worker URL now includes the mode ID to ensure that it is fetched from the same mode that served the request when running an A/B test.
+- All fetch requests sent from the browser now contain the following headers:
+  - x-react-storefront: true
+  - x-moov-api-version: (the build timestamp of the client sending the request)
 
 ### 6.64.1
 

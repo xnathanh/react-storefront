@@ -8,7 +8,7 @@ import hydrate from './utils/hydrate'
 import scheduleHydration from './utils/scheduleHydration'
 import registerServiceWorker, { unregister } from './registerServiceWorker'
 import PWA from './PWA'
-import { patchBroweserFetch } from './router/clientFetch'
+import { patchBroweserFetch } from './router/versionedFetch'
 
 /**
  * Bootstraps the PWA react application.

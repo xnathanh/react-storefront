@@ -5,7 +5,17 @@
 import getAPIVersion from './getAPIVersion'
 import { REACT_STOREFRONT, API_VERSION } from './headers'
 
-export default function clientFetch(url, options = {}) {
+/**
+ * The standard fetch with two additional headers:
+ *
+ * REACT_STOREFRONT - allows moovweb xdn logging to track that the request came from react-storefront
+ * API_VERSION - required by the service worker's bootstrap.js to fulfill a request from the cache.
+ *
+ * @param {String} url
+ * @param {Object} options
+ * @return {Promise}
+ */
+export default function versionedFetch(url, options = {}) {
   options = {
     ...options,
     headers: {
@@ -14,13 +24,14 @@ export default function clientFetch(url, options = {}) {
       [API_VERSION]: getAPIVersion() // needed for the service worker to determine the correct runtime cache name and ensure that we're not getting a cached response from a previous api version
     }
   }
-
-  console.log('fetch', url, options)
   return require('isomorphic-unfetch')(url, options)
 }
 
+/**
+ * Overrides `window.fetch` to use `versionedFetch`.
+ */
 export function patchBroweserFetch() {
   if (typeof window !== 'undefined') {
-    window.fetch = clientFetch
+    window.fetch = versionedFetch
   }
 }
