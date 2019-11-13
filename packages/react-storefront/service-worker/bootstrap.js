@@ -429,7 +429,10 @@ workbox.routing.registerRoute(matchRuntimePath, async context => {
       return new CacheFirst(cacheOptions).handle(context)
     } else {
       // will get here in all other cases
-      return new NetworkOnly().handle(context).catch(() => offlineResponse(apiVersion, context))
+      return new CacheOnly(cacheOptions)
+        .handle(context)
+        .catch(e => new NetworkOnly().handle(context))
+        .catch(() => offlineResponse(apiVersion, context))
     }
   } catch (e) {
     // if anything goes wrong, fallback to network

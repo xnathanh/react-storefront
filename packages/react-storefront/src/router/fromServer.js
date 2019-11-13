@@ -4,15 +4,7 @@
  */
 import { fetchLatest, StaleResponseError } from '../fetchLatest'
 import { abortPrefetches, resumePrefetches, isServiceWorkerReady } from './serviceWorker'
-import {
-  HANDLER,
-  RESPONSE_TYPE,
-  SURROGATE_KEY,
-  REACT_STOREFRONT,
-  API_VERSION,
-  CLIENT_IF
-} from './headers'
-import getAPIVersion from './getAPIVersion'
+import { HANDLER, RESPONSE_TYPE, SURROGATE_KEY, CLIENT_IF } from './headers'
 
 let doFetch
 
@@ -27,14 +19,10 @@ let doFetch
  */
 export async function fetch(url, { cache = 'default', onlyHit = false } = {}, originalResponse) {
   abortPrefetches()
-  doFetch = doFetch || fetchLatest(require('isomorphic-unfetch'))
+  doFetch = doFetch || fetchLatest(window.fetch)
 
   const { href } = location
-
-  const headers = {
-    [REACT_STOREFRONT]: 'true', // allows back end handlers to quickly identify PWA API requests,
-    [API_VERSION]: getAPIVersion() // needed for the service worker to determine the correct runtime cache name and ensure that we're not getting a cached response from a previous api version
-  }
+  const headers = {}
 
   if (onlyHit) {
     headers[CLIENT_IF] = 'cache-hit'

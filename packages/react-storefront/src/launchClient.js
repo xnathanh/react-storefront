@@ -8,6 +8,7 @@ import hydrate from './utils/hydrate'
 import scheduleHydration from './utils/scheduleHydration'
 import registerServiceWorker, { unregister } from './registerServiceWorker'
 import PWA from './PWA'
+import { patchBroweserFetch } from './router/clientFetch'
 
 /**
  * Bootstraps the PWA react application.
@@ -33,6 +34,7 @@ export default function launchClient({
 }) {
   scheduleHydration(delayHydrationUntilPageLoad, additionalDelay, () => {
     const history = createBrowserHistory()
+    patchBroweserFetch()
 
     hydrate({
       component: (
