@@ -892,7 +892,7 @@ describe('Router:Node', function() {
       })
     })
 
-    it('should return generate custom cache keys for outer edge manager', () => {
+    it('should generate custom cache keys for outer edge manager', () => {
       const router = new Router().get('/', cacheHandler).get('/p/:id', cacheHandler)
 
       const customKey = {
@@ -908,46 +908,80 @@ describe('Router:Node', function() {
         query_parameters_mode: 'blacklist'
       }
 
-      expect(router.createEdgeConfiguration()).toEqual({
-        custom_cache_keys: [
-          {
-            path_regex: /^\/\.json(?=\?|$)/.source,
-            ...customKey
-          },
-          {
-            path_regex: /^\/\.amp(?=\?|$)/.source,
-            ...customKey
-          },
-          {
-            path_regex: /^\/(?=\?|$)/.source,
-            ...customKey
-          },
-          {
-            path_regex: /^\/p\/([^\/\?]+)\.json(?=\?|$)/.source,
-            ...customKey
-          },
-          {
-            path_regex: /^\/p\/([^\/\?]+)\.amp(?=\?|$)/.source,
-            ...customKey
-          },
-          {
-            path_regex: /^\/p\/([^\/\?]+)(?=\?|$)/.source,
-            ...customKey
-          }
-        ],
-        router: []
-      })
+      const config = router.createEdgeConfiguration()
+
+      expect(config.custom_cache_keys).toEqual([
+        {
+          path_regex: /^\/\.json(?=\?|$)/.source,
+          ...customKey
+        },
+        {
+          path_regex: /^\/\.amp(?=\?|$)/.source,
+          ...customKey
+        },
+        {
+          path_regex: /^\/(?=\?|$)/.source,
+          ...customKey
+        },
+        {
+          path_regex: /^\/p\/([^\/\?]+)\.json(?=\?|$)/.source,
+          ...customKey
+        },
+        {
+          path_regex: /^\/p\/([^\/\?]+)\.amp(?=\?|$)/.source,
+          ...customKey
+        },
+        {
+          path_regex: /^\/p\/([^\/\?]+)(?=\?|$)/.source,
+          ...customKey
+        }
+      ])
     })
 
     describe('edge proxy configuration', () => {
       it('should proxy to given origin', () => {
         const router = new Router().get('/foo', fromOrigin('desktop'))
-        expect(router.createEdgeConfiguration().router[2]).toEqual({
-          path_regex: '^\\/foo(?=\\?|$)',
-          proxy: {
-            backend: 'desktop'
-          }
-        })
+        const routes = router.createEdgeConfiguration().router
+        expect(routes).toEqual([
+          {
+            path_regex: '^\\/\\.powerlinks\\.js\\.json(?=\\?|$)',
+            proxy: { backend: 'moov' }
+          },
+          {
+            path_regex: '^\\/\\.powerlinks\\.js\\.amp(?=\\?|$)',
+            proxy: { backend: 'moov' }
+          },
+          { path_regex: '^\\/\\.powerlinks\\.js(?=\\?|$)', proxy: { backend: 'moov' } },
+          { proxy: { backend: 'desktop' }, path_regex: '^\\/foo\\.json(?=\\?|$)' },
+          { proxy: { backend: 'desktop' }, path_regex: '^\\/foo\\.amp(?=\\?|$)' },
+          { proxy: { backend: 'desktop' }, path_regex: '^\\/foo(?=\\?|$)' },
+          { path_regex: undefined, proxy: { backend: 'moov' } }
+        ])
+      })
+      it('should handle fallback(fromOrigin)', () => {
+        const router = new Router().get('/foo', fromServer('./foo')).fallback(fromOrigin())
+        expect(router.createEdgeConfiguration().router).toEqual([
+          {
+            path_regex: '^\\/\\.powerlinks\\.js\\.json(?=\\?|$)',
+            proxy: { backend: 'moov' }
+          },
+          {
+            path_regex: '^\\/\\.powerlinks\\.js\\.amp(?=\\?|$)',
+            proxy: { backend: 'moov' }
+          },
+          { path_regex: '^\\/\\.powerlinks\\.js(?=\\?|$)', proxy: { backend: 'moov' } },
+          { path_regex: '^\\/foo\\.json(?=\\?|$)', proxy: { backend: 'moov' } },
+          { path_regex: '^\\/foo\\.amp(?=\\?|$)', proxy: { backend: 'moov' } },
+          { path_regex: '^\\/foo(?=\\?|$)', proxy: { backend: 'moov' } },
+          { proxy: { backend: 'origin' } }
+        ])
+      })
+      it('should exclude pwa routes if includePWARoutes=false', () => {
+        const router = new Router()
+          .get('/foo', fromOrigin())
+          .get('/p/:id', fromServer('./product/product-handler'))
+
+        expect(router.createEdgeConfiguration({ includePWARoutes: false }).router).toHaveLength(3)
       })
       it('should add caching to backends.response_router', () => {
         const router = new Router().get(
@@ -957,7 +991,7 @@ describe('Router:Node', function() {
         )
         const config = router.createEdgeConfiguration()
 
-        expect(config.router[2]).toEqual({
+        expect(config.router[5]).toEqual({
           path_regex: '^\\/foo(?=\\?|$)',
           proxy: {
             backend: 'desktop'
@@ -991,17 +1025,35 @@ describe('Router:Node', function() {
           '/foo/:cat/:id',
           fromOrigin('desktop').transformPath('/bar/{cat}/{id}')
         )
-        expect(router.createEdgeConfiguration().router[2]).toEqual({
-          path_regex: '^\\/foo\\/([^\\/\\?]+)\\/([^\\/\\?]+)(?=\\?|$)',
-          proxy: {
-            backend: 'desktop',
-            rewrite_path_regex: '/bar/\\1/\\2'
-          }
-        })
+        expect(router.createEdgeConfiguration().router).toEqual([
+          {
+            path_regex: '^\\/\\.powerlinks\\.js\\.json(?=\\?|$)',
+            proxy: { backend: 'moov' }
+          },
+          {
+            path_regex: '^\\/\\.powerlinks\\.js\\.amp(?=\\?|$)',
+            proxy: { backend: 'moov' }
+          },
+          { path_regex: '^\\/\\.powerlinks\\.js(?=\\?|$)', proxy: { backend: 'moov' } },
+          {
+            proxy: { backend: 'desktop', rewrite_path_regex: '/bar/\\1/\\2' },
+            path_regex: '^\\/foo\\/([^\\/\\?]+)\\/([^\\/\\?]+)\\.json(?=\\?|$)'
+          },
+          {
+            proxy: { backend: 'desktop', rewrite_path_regex: '/bar/\\1/\\2' },
+            path_regex: '^\\/foo\\/([^\\/\\?]+)\\/([^\\/\\?]+)\\.amp(?=\\?|$)'
+          },
+          {
+            proxy: { backend: 'desktop', rewrite_path_regex: '/bar/\\1/\\2' },
+            path_regex: '^\\/foo\\/([^\\/\\?]+)\\/([^\\/\\?]+)(?=\\?|$)'
+          },
+          { path_regex: undefined, proxy: { backend: 'moov' } }
+        ])
       })
       it('should redirect with status', () => {
         const router = new Router().get('/foo', redirectTo('/bar').withStatus(302))
-        expect(router.createEdgeConfiguration().router[2]).toEqual({
+        const routes = router.createEdgeConfiguration().router
+        expect(routes[routes.length - 2]).toEqual({
           path_regex: '^\\/foo(?=\\?|$)',
           redirect: {
             status: 302,
@@ -1011,7 +1063,8 @@ describe('Router:Node', function() {
       })
       it('should redirect with status and path transformation', () => {
         const router = new Router().get('/foo/*path', redirectTo('/bar/{path}').withStatus(200))
-        expect(router.createEdgeConfiguration().router[2]).toEqual({
+        const routes = router.createEdgeConfiguration().router
+        expect(routes[routes.length - 2]).toEqual({
           path_regex: '^\\/foo\\/([^?]*?)(?=\\?|$)',
           redirect: {
             status: 200,
@@ -1019,12 +1072,13 @@ describe('Router:Node', function() {
           }
         })
       })
-      it('should transformed path with multiple uses of variable', () => {
+      it('should support a transformed path with multiple uses of variable', () => {
         const router = new Router().get(
           '/foo/:x/:y',
           fromOrigin('desktop').transformPath('/bar/{x}/{y}/{x}')
         )
-        const config = router.createEdgeConfiguration().router[2]
+        const config = router.createEdgeConfiguration().router[5]
+
         expect(config).toEqual({
           path_regex: '^\\/foo\\/([^\\/\\?]+)\\/([^\\/\\?]+)(?=\\?|$)',
           proxy: {
@@ -1045,7 +1099,7 @@ describe('Router:Node', function() {
           '/foo/:x',
           fromOrigin('desktop').transformPath('/bar/\\{x}/{x}')
         )
-        const config = router.createEdgeConfiguration().router[2]
+        const config = router.createEdgeConfiguration().router[5]
         expect(config).toEqual({
           path_regex: '^\\/foo\\/([^\\/\\?]+)(?=\\?|$)',
           proxy: {
@@ -1063,7 +1117,8 @@ describe('Router:Node', function() {
       })
       it('should handle variable at beginning of path', () => {
         const router = new Router().get('/foo/:x', fromOrigin('desktop').transformPath('{x}/bar'))
-        expect(router.createEdgeConfiguration().router[2]).toEqual({
+        const routes = router.createEdgeConfiguration().router
+        expect(routes[routes.length - 2]).toEqual({
           path_regex: '^\\/foo\\/([^\\/\\?]+)(?=\\?|$)',
           proxy: {
             backend: 'desktop',
@@ -1073,7 +1128,8 @@ describe('Router:Node', function() {
       })
       it('should handle variable within a path param', () => {
         const router = new Router().get('/foo/:x', fromOrigin('desktop').transformPath('/bar{x}'))
-        expect(router.createEdgeConfiguration().router[2]).toEqual({
+        const routes = router.createEdgeConfiguration().router
+        expect(routes[routes.length - 2]).toEqual({
           path_regex: '^\\/foo\\/([^\\/\\?]+)(?=\\?|$)',
           proxy: {
             backend: 'desktop',

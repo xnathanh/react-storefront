@@ -9,7 +9,7 @@ async function fn(params, request, response) {
   throw new Error('fromOrigin is only supported when running in the Moovweb XDN.')
 }
 
-export default function fromOrigin(backend) {
+export default function fromOrigin(backend = 'origin') {
   const type = 'fromOrigin'
   const config = {
     proxy: {
