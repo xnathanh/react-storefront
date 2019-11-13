@@ -69,7 +69,23 @@ export function activate() {
   }
 }
 
-function fire(event, ...args) {
+function fire(event, data, ...args) {
+  data = data || {}
+
+  if (typeof document !== 'undefined' && !data.metadata) {
+    Object.assign(data, {
+      metadata: {
+        title: document.title,
+        pathname: location.pathname,
+        search: location.search,
+        uri: location.pathname + location.search,
+        referrer: document.referrer
+      }
+    })
+  }
+
+  args = [data, ...args]
+
   if (activated) {
     for (let target of _targets) {
       const fn = target[event]

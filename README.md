@@ -74,9 +74,93 @@ yarn release
 
 ## Changelog
 
-### 6.61.0
+### 6.65.0
 
 - The service worker URL now includes the mode ID to ensure that it is fetched from the same mode that served the request when running an A/B test.
+
+### 6.64.1
+
+- Fixes `additionalDelay` bug which caused hydration before load
+
+### 6.64.0
+
+- Adds the ability to cache routes with a `fromOrigin` handler.
+- `withPersonalization` will no longer fire the supplied callback unless the parent page component is visible.
+- Added `additionalDelay` option to launch client to further delay hydration after page load.
+
+### 6.63.0
+
+- Optimized css minification to reduce request handling time.
+- Optimized generating links for SEO in Menu.
+- Production server build now uses terser.
+
+### 6.62.2
+
+- Fixes metadata for analytics events that have no arguments
+
+### 6.62.1
+
+- Fixes metadata for analytics events that get queued before the app becomes interactive.
+
+### 6.62.0
+
+- You can now delay hydration until after the window's `load` event fires to improve largest image render times.
+
+```js
+// src/client.js
+
+import App from './App'
+import launchClient from 'react-storefront/launchClient'
+import model from './AppModel'
+import router from './routes'
+import theme from './theme'
+
+launchClient({
+  App,
+  router,
+  theme,
+  model,
+  delayHydrationUntilPageLoad: true
+})
+```
+
+### 6.61.0
+
+- Adds a `metadata` object to all analytics events with the following keys:
+
+```js
+metadata: {
+  title: document.title,
+  pathname: location.pathname,
+  search: location.search,
+  uri: location.pathname + location.search,
+  referrer: document.referrer
+}
+```
+
+### 6.60.6
+
+- Fixed caching for Product images
+
+### 6.60.5
+
+- Fixed bug in Router that allowed internal location state to get out of sync
+
+### 6.60.4
+
+- Improves the performance of the Menu component by only rendering the SEO links on the server.
+
+### 6.60.3
+
+- Removing the bloat of JIMP from the React Storefront server code. It was an unused dependency of the amp-optimizer
+
+### 6.60.2
+
+- Fixed a bug where the main image on a PDP will flash in on the first client-side transition from a PLP.
+
+### 6.60.1
+
+- Fixed `Response`'s handling of cookies. Now able to set multiple cookies.
 
 ### 6.60.0
 

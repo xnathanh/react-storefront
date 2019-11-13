@@ -41,6 +41,82 @@ describe('analytics', () => {
     })
   })
 
+  describe('metadata', () => {
+    beforeAll(() => {
+      Object.defineProperty(document, 'referrer', {
+        get: () => 'https://www.google.com'
+      })
+
+      Object.defineProperty(document, 'title', {
+        get: () => 'Title'
+      })
+    })
+
+    it('sends browser location metadata', () => {
+      let md
+      window.history.pushState({}, 'Title', '/foo?bar=1')
+
+      const target = {
+        pageView({ metadata }) {
+          md = metadata
+        }
+      }
+      configureAnalytics(target)
+      activate()
+      analytics.fire('pageView', {})
+
+      expect(md).toEqual({
+        pathname: '/foo',
+        referrer: 'https://www.google.com',
+        search: '?bar=1',
+        title: 'Title',
+        uri: '/foo?bar=1'
+      })
+    })
+
+    it('sends metadata for queued events', () => {
+      let md
+      window.history.pushState({}, 'Title', '/foo?bar=1')
+
+      const target = {
+        pageView({ metadata }) {
+          md = metadata
+        }
+      }
+      configureAnalytics(target)
+      analytics.fire('pageView', {})
+      activate()
+      expect(md).toEqual({
+        pathname: '/foo',
+        referrer: 'https://www.google.com',
+        search: '?bar=1',
+        title: 'Title',
+        uri: '/foo?bar=1'
+      })
+    })
+
+    it('should handle a null data argument', () => {
+      let md
+      window.history.pushState({}, 'Title', '/foo?bar=1')
+
+      const target = {
+        pageView({ metadata }) {
+          md = metadata
+        }
+      }
+      configureAnalytics(target)
+      analytics.fire('pageView')
+      activate()
+      expect(md).toEqual({
+        pathname: '/foo',
+        referrer: 'https://www.google.com',
+        search: '?bar=1',
+        title: 'Title',
+        uri: '/foo?bar=1'
+      })
+    })
+  })
+
   it('displays a warning when a target does not support a method', () => {
     jest.spyOn(global.console, 'warn')
     const target = {}
@@ -71,7 +147,9 @@ describe('analytics', () => {
 
   it('should catch errors and allow other targets to be called', () => {
     const errorTarget = {
-      test: jest.fn(() => { throw new Error('test')})
+      test: jest.fn(() => {
+        throw new Error('test')
+      })
     }
 
     const successTarget = {

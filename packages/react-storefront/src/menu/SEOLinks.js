@@ -3,13 +3,16 @@
  * Copyright © 2017-2019 Moov Corporation.  All rights reserved.
  */
 import React, { Component, Fragment } from 'react'
-import { observer, inject } from 'mobx-react'
-import Link from '../Link'
+import { inject } from 'mobx-react'
 import NoScript from '../NoScript'
+import { absoluteURL } from '../utils/url'
 
 @inject('app')
-@observer
 export default class SEOLinks extends Component {
+  shouldComponentUpdate() {
+    return false
+  }
+
   render() {
     const levels = this.props.app.menu.levels
     const root = levels.length && levels[0]
@@ -25,9 +28,9 @@ export default class SEOLinks extends Component {
 
         if (item.url) {
           links.push(
-            <Link key={key++} to={item.url}>
+            <a key={key++} href={absoluteURL(item.url)}>
               {item.text}
-            </Link>
+            </a>
           )
         }
 
@@ -41,14 +44,6 @@ export default class SEOLinks extends Component {
 
     return (
       <Fragment>
-        {/* 
-        React doesn't execute the children of a noscript on the client, 
-        therefore the style rules for Link will get written out of order
-        unless we force a Link to render here.
-        */}
-        <div style={{ display: 'none' }}>
-          <Link />
-        </div>
         <NoScript>
           <nav
             style={{
