@@ -89,7 +89,7 @@ export default function register() {
  * @private
  */
 function getModeQueryString() {
-  const { mode } = window.moov.state
+  const { mode } = window.initialState
 
   if (mode) {
     return `?moov_fetch_from=${encodeURIComponent(mode.id)}`

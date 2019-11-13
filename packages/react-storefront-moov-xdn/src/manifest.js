@@ -37,5 +37,8 @@ export function getMode() {
     }
   }
 
-  return null
+  // We'll really only get here in development, where the moovManifest doesn't
+  // match the format we see in the cloud.  So it will never yield a match using the
+  // code above.
+  return { id: 'default', name: 'default' }
 }
