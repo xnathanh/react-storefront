@@ -74,6 +74,10 @@ yarn release
 
 ## Changelog
 
+### 6.65.0
+
+- Adds `client` and `server` props to `<Lazy/>`, giving you the option to fully render a page on the server while making some components lazy during client side navigation.
+
 ### 6.64.1
 
 - Fixes `additionalDelay` bug which caused hydration before load
