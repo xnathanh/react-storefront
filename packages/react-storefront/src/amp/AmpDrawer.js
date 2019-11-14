@@ -64,6 +64,10 @@ export const styles = ({ theme, anchor }) => ({
   }
 })
 
+/**
+ * An AMP compatible implementation of `react-storefront/Drawer`.  Do not use this component directly,
+ * Use `DrawerButton` instead.
+ */
 @withStyleProps(styles, { name: 'RSFAmpDrawer' })
 export default class AmpDrawer extends Component {
   render() {
@@ -87,6 +91,8 @@ export default class AmpDrawer extends Component {
           </Helmet>
           <div
             className={classes.hidden}
+            role="button"
+            tabIndex="0"
             on={`tap:${ampStateId}.close`}
             amp-bind={`class=>${ampStateId}.open ? "${classnames(classes.backdrop)}" : "${
               classes.hidden
@@ -116,6 +122,8 @@ export default class AmpDrawer extends Component {
         </Helmet>
         <div
           className={classes.hidden}
+          role="button"
+          tabIndex="0"
           on={`tap:AMP.setState({ ${ampStateId}: { open: false }})`}
           amp-bind={`class=>${ampStateId}.open ? "${classnames(classes.backdrop)}" : "${
             classes.hidden
@@ -129,6 +137,8 @@ export default class AmpDrawer extends Component {
           >
             <div
               className={classes.container}
+              role="button"
+              tabIndex="0"
               on={`tap:AMP.setState({ ${ampStateId}: { open: true }})`}
             >
               {showCloseButton && anchor === 'bottom' && (

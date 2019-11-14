@@ -77,6 +77,7 @@ yarn release
 ### 6.65.0
 
 - Adds `client` and `server` props to `<Lazy/>`, giving you the option to fully render a page on the server while making some components lazy during client side navigation.
+- Fixes AMP validation errors on AmpDrawer
 
 ### 6.64.1
 
