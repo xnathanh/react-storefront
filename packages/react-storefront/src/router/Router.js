@@ -14,6 +14,7 @@ import powerLinkHandler from './powerLinkHandler'
 import fromServer from './fromServer'
 import RegexpVisitor from 'route-parser/lib/route/visitors/regexp'
 import defaultClientCacheConfig from './defaultClientCacheConfig'
+import get from 'lodash/get'
 
 /**
  * Provides routing for MUR-based applications and PWAs.  This class is inspired by express and uses https://github.com/rcs/route-parser,
@@ -632,27 +633,24 @@ export default class Router extends EventEmitter {
     history.replace(`${history.location.pathname}?${nextParams}`)
   }
 
-  createEdgeConfiguration({ includePWARoutes = true } = {}) {
+  createEdgeConfiguration() {
     const custom_cache_keys = []
     const router = []
     const backends = {}
-    const findEdgeHandler = handler =>
-      handler.type === 'fromOrigin' || handler.type === 'redirectTo'
+    const matchEdgeHandlers = ({ type }) => ['fromOrigin', 'redirectTo'].includes(type)
 
-    const processRoute = route => {
-      const edgeHandler = route.handlers.find(findEdgeHandler)
+    this.routes.concat({ handlers: this.fallbackHandlers }).forEach(route => {
+      const edgeHandler = route.handlers.find(matchEdgeHandlers)
       const cache = route.handlers.find(handler => handler.type === 'cache')
-      const path = this.routeToRegex(route)
-      const path_regex = path ? path.source : undefined
+      const path_regex = this.routeToRegex(route)
+      const spec = get(route, 'path.spec', '__fallback__')
 
       if (edgeHandler) {
-        const edgeRoute = { ...edgeHandler.config(route.path) }
-
-        if (path_regex) {
-          edgeRoute.path_regex = path_regex
-        }
-
-        router.push(edgeRoute)
+        router.push({
+          notes: `rsf: ${spec}`,
+          path_regex,
+          ...edgeHandler.config(route.path)
+        })
 
         if (cache && cache.edge && cache.edge.maxAgeSeconds) {
           this.addBackendResponseRoute(
@@ -662,28 +660,27 @@ export default class Router extends EventEmitter {
             cache.edge.maxAgeSeconds
           )
         }
-      } else if (includePWARoutes) {
+      } else {
         router.push({
+          notes: `rsf: ${spec}`,
           path_regex,
-          proxy: {
-            backend: 'moov'
-          }
+          proxy: { backend: 'moov' }
         })
       }
 
       if (cache && cache.edge && cache.edge.key) {
         custom_cache_keys.push({
+          notes: `rsf: ${spec}`,
           path_regex,
           ...cache.edge.key.toJSON()
         })
+      } else {
+        custom_cache_keys.push({
+          notes: `rsf: ${spec}`,
+          path_regex
+        })
       }
-    }
-
-    for (let route of this.routes) {
-      processRoute(route)
-    }
-
-    processRoute({ handlers: this.fallbackHandlers })
+    })
 
     const result = {
       custom_cache_keys,
@@ -720,8 +717,9 @@ export default class Router extends EventEmitter {
    */
   routeToRegex(route) {
     if (route.path) {
-      return RegexpVisitor.visit(route.path.ast).re
+      return RegexpVisitor.visit(route.path.ast).re.source.replace(/\\\//g, '/')
+    } else {
+      return '.'
     }
-    return null
   }
 }

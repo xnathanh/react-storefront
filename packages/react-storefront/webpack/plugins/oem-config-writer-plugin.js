@@ -2,10 +2,9 @@ const { RawSource } = require('webpack-sources')
 const requireFromString = require('require-from-string')
 
 module.exports = class OEMConfigWriterPlugin {
-  constructor({ outputFile, includePWARoutes = true }) {
+  constructor({ outputFile }) {
     this.outputFile = outputFile
     this.previousOEMConfigJson = null
-    this.includePWARoutes = includePWARoutes
   }
 
   apply(compiler) {
@@ -25,7 +24,7 @@ module.exports = class OEMConfigWriterPlugin {
       delete compilation.assets['routes.js']
       delete compilation.assets['routes.js.map']
 
-      const OEMConfig = routes.createEdgeConfiguration({ includePWARoutes })
+      const OEMConfig = routes.createEdgeConfiguration()
       const OEMConfigJson = JSON.stringify(OEMConfig)
 
       if (OEMConfigJson !== this.previousOEMConfigJson) {
