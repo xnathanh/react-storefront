@@ -16,7 +16,6 @@ export { default as lazyLoadImages } from './lazyLoadImages.js';
 export { default as minifyStyles } from './minifyStyles.js';
 export { default as optimizeImages } from './optimizeImages.js';
 export { default as profile } from './profile.js';
-export { default as scheduleHydration } from './scheduleHydration.js';
 export { default as scriptInjector } from './scriptInjector.js';
 export { default as state } from './state.js';
 export { default as url } from './url.js';

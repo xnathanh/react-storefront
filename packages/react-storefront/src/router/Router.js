@@ -632,62 +632,49 @@ export default class Router extends EventEmitter {
     history.replace(`${history.location.pathname}?${nextParams}`)
   }
 
-  createEdgeConfiguration({ includePWARoutes = true } = {}) {
-    const custom_cache_keys = []
-    const router = []
+  createEdgeConfiguration() {
+    const customCacheKeys = []
+    const routes = []
     const backends = {}
-    const findEdgeHandler = handler =>
-      handler.type === 'fromOrigin' || handler.type === 'redirectTo'
 
-    const processRoute = route => {
-      const edgeHandler = route.handlers.find(findEdgeHandler)
+    for (let route of this.routes) {
+      const routingHandler = route.handlers.find(
+        handler => handler.type === 'fromOrigin' || handler.type === 'redirectTo'
+      )
+
       const cache = route.handlers.find(handler => handler.type === 'cache')
-      const path = this.routeToRegex(route)
-      const path_regex = path ? path.source : undefined
 
-      if (edgeHandler) {
-        const edgeRoute = { ...edgeHandler.config(route.path) }
+      let path
 
-        if (path_regex) {
-          edgeRoute.path_regex = path_regex
-        }
+      if (routingHandler) {
+        path = this.routeToRegex(route).source
 
-        router.push(edgeRoute)
+        routes.push({
+          path_regex: path,
+          ...routingHandler.config(route.path)
+        })
 
         if (cache && cache.edge && cache.edge.maxAgeSeconds) {
           this.addBackendResponseRoute(
             backends,
-            edgeHandler.config().proxy.backend,
-            path_regex,
+            routingHandler.config().proxy.backend,
+            path,
             cache.edge.maxAgeSeconds
           )
         }
-      } else if (includePWARoutes) {
-        router.push({
-          path_regex,
-          proxy: {
-            backend: 'moov'
-          }
-        })
       }
 
       if (cache && cache.edge && cache.edge.key) {
-        custom_cache_keys.push({
-          path_regex,
+        customCacheKeys.push({
+          path_regex: this.routeToRegex(route).source,
           ...cache.edge.key.toJSON()
         })
       }
     }
 
-    for (let route of this.routes) {
-      processRoute(route)
-    }
-
-    processRoute({ handlers: this.fallbackHandlers })
-
     const result = {
-      custom_cache_keys,
-      router
+      custom_cache_keys: customCacheKeys,
+      router: routes
     }
 
     if (Object.keys(backends).length) {
@@ -719,9 +706,6 @@ export default class Router extends EventEmitter {
    * @param {Object} route
    */
   routeToRegex(route) {
-    if (route.path) {
-      return RegexpVisitor.visit(route.path.ast).re
-    }
-    return null
+    return RegexpVisitor.visit(route.path.ast).re
   }
 }

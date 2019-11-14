@@ -74,10 +74,6 @@ yarn release
 
 ## Changelog
 
-### 6.65.0
-
-- Adds support for `router.fallback(fromOrigin())` and `router.fallback(redirectTo(url))`
-
 ### 6.64.1
 
 - Fixes `additionalDelay` bug which caused hydration before load
