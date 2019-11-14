@@ -18,21 +18,31 @@ export default function fromOrigin(backend = 'origin') {
   }
   const runOn = { server: true, client: false }
 
-  return {
-    type,
-    runOn,
-    config: () => config,
-    transformPath: path => {
-      return {
-        type,
-        runOn,
-        config: routePath => {
-          config.proxy.rewrite_path_regex = transformParams(routePath, path)
-          return config
-        },
-        fn
-      }
-    },
-    fn
+  let hostHeader = null
+  let transformPath = null
+
+  const build = () => {
+    return {
+      type,
+      runOn,
+      config: routePath => {
+        if (transformPath && routePath) {
+          config.proxy.rewrite_path_regex = transformParams(routePath, transformPath)
+        }
+        return config
+      },
+      hostHeader,
+      withHostHeader: header => {
+        hostHeader = header
+        return build()
+      },
+      transformPath: path => {
+        transformPath = path
+        return build()
+      },
+      fn
+    }
   }
+
+  return build()
 }

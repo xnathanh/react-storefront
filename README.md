@@ -77,6 +77,7 @@ yarn release
 ### 6.65.0
 
 - Adds support for `router.fallback(fromOrigin())` and `router.fallback(redirectTo(url))`
+- Adds support for overriding downstreams host headers with `fromOrigin().withHostHeader("www.foo.com")`
 
 ### 6.64.1
 
