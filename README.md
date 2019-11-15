@@ -74,6 +74,10 @@ yarn release
 
 ## Changelog
 
+### 6.65.1
+
+- You can now use `fromOrigin` in local development. In local development `fromOrigin` simply uses `proxyUpstream()` with no arguments.
+
 ### 6.65.0
 
 - Adds `client` and `server` props to `<Lazy/>`, giving you the option to fully render a page on the server while making some components lazy during client side navigation.
