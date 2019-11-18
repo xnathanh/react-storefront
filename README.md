@@ -74,6 +74,21 @@ yarn release
 
 ## Changelog
 
+### 6.66.0
+
+- You can now use the stale-while-revalidate caching strategy at the edge by specifying `staleWhileRevalidateSeconds`:
+
+```js
+router.get(
+  '/p/:id',
+  cache({
+    edge: {
+      staleWhileRevalidateSeconds: 24 * 60 * 60
+    }
+  })
+)
+```
+
 ### 6.65.1
 
 - You can now use `fromOrigin` in local development. In local development `fromOrigin` simply uses `proxyUpstream()` with no arguments.

@@ -4445,13 +4445,6 @@ babel-plugin-react-docgen@^2.0.0:
     lodash "^4.17.10"
     react-docgen "^3.0.0-rc.1"
 
-babel-plugin-react-storefront@^6.0.3:
-  version "6.62.2"
-  resolved "https://registry.yarnpkg.com/babel-plugin-react-storefront/-/babel-plugin-react-storefront-6.62.2.tgz#fba1eee677660e847279c81974b09061d5a59298"
-  integrity sha512-llwmaMtQWB1HYtC4/FHWW+XIIB2CRk3TIvNMetysp9Gzv635KUK/rfH2ZNvgOG8phraOYsbGDu24Ng9rE1KfIA==
-  dependencies:
-    babel-core "^6.26.0"
-
 babel-plugin-syntax-object-rest-spread@^6.13.0, babel-plugin-syntax-object-rest-spread@^6.8.0:
   version "6.13.0"
   resolved "https://registry.yarnpkg.com/babel-plugin-syntax-object-rest-spread/-/babel-plugin-syntax-object-rest-spread-6.13.0.tgz#fd6536f2bce13836ffa3a5458c4903a597bb3bf5"
