@@ -7,7 +7,7 @@
  * Sets the correct response headers to configure browser and server caching
  * @param {Object} options
  * @param {Number} options.serverMaxAge The max age in seconds for edge caches.
- * @param {Number} options.serverStaleWhileRevalidate The time in seconds before revalidation for edge caches.
+ * @param {Number} options.serverStaleWhileRevalidate The number seconds beyond `serverMaxAge` when a stale response will be served from the cache.
  * @param {Number} options.browserMaxAge The TTL for the browser's cache
  */
 export function cache({ serverMaxAge, serverStaleWhileRevalidate, browserMaxAge }) {

@@ -180,10 +180,8 @@ export default class Response {
    * @return {Response} this
    */
   cacheOnServer({ maxAgeSeconds, staleWhileRevalidateSeconds }) {
-    if (maxAgeSeconds == null && staleWhileRevalidateSeconds == null)
-      throw new Error(
-        'You must specify either maxAgeSeconds or staleWhileRevalidateSeconds when calling response.cacheOnServer.'
-      )
+    if (maxAgeSeconds == null)
+      throw new Error('You must specify maxAgeSeconds when calling response.cacheOnServer.')
 
     this.cache = {
       serverMaxAge: maxAgeSeconds,

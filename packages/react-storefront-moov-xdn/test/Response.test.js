@@ -141,7 +141,9 @@ describe('Response', () => {
 
     it('should return the response', () => {
       expect(response.cacheOnServer({ maxAgeSeconds: 100 })).toBe(response)
-      expect(response.cacheOnServer({ staleWhileRevalidateSeconds: 100 })).toBe(response)
+      expect(response.cacheOnServer({ maxAgeSeconds: 100, staleWhileRevalidateSeconds: 100 })).toBe(
+        response
+      )
     })
 
     it('should throw an Error if no parameter is provided', () => {

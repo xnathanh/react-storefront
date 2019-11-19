@@ -34,10 +34,9 @@ import { SURROGATE_KEY } from './headers'
  * @param {Object} options
  * @param {Number} options.edge
  * @param {Number} options.edge.maxAgeSeconds The number of seconds the result should be cached on
- *  the server.  The maxAgeSeconds key is required when specifying a server config. You can `maxAgeSeconds` and `staleWhileRevalidateSeconds` together or separately.
- * @param {Number} options.edge.staleWhileRevalidateSeconds The number of seconds before a cached response should be refreshed. When this option
- *  is specified, a stale response will be served while a new response is being created.  This will lead to a greater percentage of requests being
- *  served from the cache, but some users will receive stale content.  You can `maxAgeSeconds` and `staleWhileRevalidateSeconds` together or separately.
+ *  the server.  The maxAgeSeconds key is required when specifying a server config.
+ * @param {Number} options.edge.staleWhileRevalidateSeconds Use this in combination
+ *  with maxAgeSeconds to continue to serve cached responses after their time-to-live has expired.
  * @param {Object} options.edge.key A custom cache key to override the default caching behavior.  Use `createCustomCacheKey()` to split the cache by
  *  headers and cookies, and/or normalize the cache by removing specific query parameters.
  * @param {Function} options.edge.surrogateKey A function that is passed the route params and the request and returns a surrogate key under which to cache the response.
