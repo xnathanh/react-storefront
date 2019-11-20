@@ -57,10 +57,12 @@ const FORWARD_HEADERS = [
   // Apply user-agent header from the browser if one isn't explicitly set
   // This helps prevent synthetic APIs from getting blocked.
   'user-agent',
-
   // This is needed when using basic auth for both the PWA and the site used
   // for the synthetic API.
-  'authorization'
+  'authorization',
+  // Needed for keeping sessions alive, some sites rely on this to
+  // be constant during a session
+  'x-forwarded-for'
 ]
 
 /**

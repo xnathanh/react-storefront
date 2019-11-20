@@ -74,6 +74,10 @@ yarn release
 
 ## Changelog
 
+### 6.65.2
+
+`fetch` calls made in handler functions now forward the `x-forwarded-for` request header automatically.
+
 ### 6.65.1
 
 - You can now use `fromOrigin` in local development. In local development `fromOrigin` simply uses `proxyUpstream()` with no arguments.
