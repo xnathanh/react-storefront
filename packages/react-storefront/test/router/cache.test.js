@@ -51,8 +51,16 @@ describe('cache', () => {
     it('should support stale-while-revalidate', () => {
       const cache = require('../../src/router').cache
       const response = new Response()
-      cache({ edge: { staleWhileRevalidateSeconds: 1000 } }).fn({}, {}, response)
-      expect(response.cache).toEqual({ browserMaxAge: 0, serverStaleWhileRevalidate: 1000 })
+      cache({ edge: { maxAgeSeconds: 1000, staleWhileRevalidateSeconds: 1000 } }).fn(
+        {},
+        {},
+        response
+      )
+      expect(response.cache).toEqual({
+        browserMaxAge: 0,
+        serverMaxAge: 1000,
+        serverStaleWhileRevalidate: 1000
+      })
     })
 
     it('should support both maxage and stale-while-revalidate', () => {
