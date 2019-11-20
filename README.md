@@ -74,10 +74,19 @@ yarn release
 
 ## Changelog
 
+### 6.65.2
+
+`fetch` calls made in handler functions now forward the `x-forwarded-for` request header automatically.
+
+### 6.65.1
+
+- You can now use `fromOrigin` in local development. In local development `fromOrigin` simply uses `proxyUpstream()` with no arguments.
+
 ### 6.65.0
 
 - Adds support for `router.fallback(fromOrigin())` and `router.fallback(redirectTo(url))`
 - Adds `client` and `server` props to `<Lazy/>`, giving you the option to fully render a page on the server while making some components lazy during client side navigation.
+- Fixes AMP validation errors on AmpDrawer
 
 ### 6.64.1
 
