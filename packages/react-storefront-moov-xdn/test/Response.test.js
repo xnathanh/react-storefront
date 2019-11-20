@@ -112,9 +112,9 @@ describe('Response', () => {
     })
   })
 
-  describe('cacheOnServer', () => {
+  describe('cacheAtEdge', () => {
     it('should set the maxAgeSeconds', () => {
-      response.cacheOnServer({ maxAgeSeconds: 100, staleWhileRevalidateSeconds: 0 })
+      response.cacheAtEdge({ maxAgeSeconds: 100, staleWhileRevalidateSeconds: 0 })
       expect(response.cache).toEqual({
         browserMaxAge: 0,
         serverMaxAge: 100,
@@ -123,7 +123,7 @@ describe('Response', () => {
     })
 
     it('should set staleWhileRevalidateSeconds', () => {
-      response.cacheOnServer({ staleWhileRevalidateSeconds: 100, maxAgeSeconds: 0 })
+      response.cacheAtEdge({ staleWhileRevalidateSeconds: 100, maxAgeSeconds: 0 })
       expect(response.cache).toEqual({
         browserMaxAge: 0,
         serverMaxAge: 0,
@@ -140,14 +140,14 @@ describe('Response', () => {
     })
 
     it('should return the response', () => {
-      expect(response.cacheOnServer({ maxAgeSeconds: 100 })).toBe(response)
-      expect(response.cacheOnServer({ maxAgeSeconds: 100, staleWhileRevalidateSeconds: 100 })).toBe(
+      expect(response.cacheAtEdge({ maxAgeSeconds: 100 })).toBe(response)
+      expect(response.cacheAtEdge({ maxAgeSeconds: 100, staleWhileRevalidateSeconds: 100 })).toBe(
         response
       )
     })
 
     it('should throw an Error if no parameter is provided', () => {
-      expect(() => response.cacheOnServer()).toThrow()
+      expect(() => response.cacheAtEdge()).toThrow()
     })
   })
 

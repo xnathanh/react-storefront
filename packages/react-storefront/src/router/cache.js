@@ -85,7 +85,8 @@ export default function cache({ edge, server, client }) {
             edge.key && edge.key.getCookieNames ? edge.key.getCookieNames() : false
 
           response.relayUpstreamCookies(false)
-          response.cacheOnServer({
+
+          response.cacheAtEdge({
             maxAgeSeconds: edge.maxAgeSeconds,
             staleWhileRevalidateSeconds: edge.staleWhileRevalidateSeconds
           })
