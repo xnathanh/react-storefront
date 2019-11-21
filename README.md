@@ -74,6 +74,10 @@ yarn release
 
 ## Changelog
 
+### 6.65.3
+
+- Improves `utils/batchPromises` concurrent execution.
+
 ### 6.65.2
 
 `fetch` calls made in handler functions now forward the `x-forwarded-for` request header automatically.
