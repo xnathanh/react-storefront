@@ -237,6 +237,7 @@ export default function fetch(url, options = {}, qsOptions) {
             statusText: response.statusText,
             ok,
             headers: new Headers(response.headers),
+            requestHeaders: () => new Headers(requestOptions.headers),
             arrayBuffer: () => Promise.resolve(data),
             text: () => Promise.resolve(extractString(response, data)),
             json: () => Promise.resolve(JSON.parse(extractString(response, data))),

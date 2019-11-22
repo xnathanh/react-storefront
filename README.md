@@ -74,6 +74,26 @@ yarn release
 
 ## Changelog
 
+### 6.66.0
+
+- You can now group multiple header values when creating a custom edge cache key.
+
+Example:
+
+```js
+cache({
+  edge: {
+    maxAgeSeconds: 1000,
+    key: createCustomCacheKey()
+      .addHeader('x-moov-xdn-device')
+      .addHeader('country', header => {
+        header.partition('na').byPattern('us|ca')
+        header.partition('eur').byPattern('de|fr|ee')
+      })
+  }
+})
+```
+
 ### 6.65.3
 
 - Improves `utils/batchPromises` concurrent execution.
