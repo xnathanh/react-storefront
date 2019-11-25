@@ -74,6 +74,10 @@ yarn release
 
 ## Changelog
 
+### 6.67.0
+
+- You can now use `fromOrigin` and `redirectTo` in your router's `fallback` handler.
+
 ### 6.66.0
 
 - You can now group multiple header values when creating a custom edge cache key.
