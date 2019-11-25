@@ -78,6 +78,31 @@ yarn release
 
 - You can now disable preload headers by setting `sendPreloadHeaders` to `false` when calling `react-storefront-moov-xdn/index` from `scripts/index` in your project.
 
+Example:
+
+```js
+console.error = console.warn = console.log
+
+module.exports = function() {
+  require('../src/analytics')
+
+  const index = require('react-storefront-moov-xdn').default
+  const { transformAmpHtml } = require('react-storefront-extensions/amp')
+  const errorReporter = require('../src/errorReporter').default
+
+  index({
+    theme: require('../src/theme').default,
+    model: require('../src/AppModel').default,
+    App: require('../src/App').default,
+    router: require('../src/routes').default,
+    blob: env.blob || require('../src/blob.dev'),
+    transform: transformAmpHtml,
+    errorReporter,
+    sendPreloadHeaders: false
+  })
+}
+```
+
 ### 6.67.1
 
 - Fixes a bug where `Link` elements with a `to` prop that points to a `fromOrigin` route do not work.
