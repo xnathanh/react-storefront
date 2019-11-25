@@ -526,7 +526,7 @@ export default class Router extends EventEmitter {
 
   /**
    * Returns true if the route will result in the server connecting to the
-   * upstream site due to the presence of a `proxyUpstream` handler, otherwise
+   * upstream site due to the presence of a `proxyUpstream` handler or `fromOrigin` handler, otherwise
    * false.
    * @private
    * @param {Object} request
@@ -535,7 +535,9 @@ export default class Router extends EventEmitter {
   willFetchFromUpstream(request) {
     const { match } = this.findMatchingRoute(request)
     let handlers = match ? match.handlers : this.fallbackHandlers
-    return handlers.some(handler => handler.type === 'proxyUpstream')
+    return handlers.some(
+      handler => handler.type === 'proxyUpstream' || handler.type === 'fromOrigin'
+    )
   }
 
   /**

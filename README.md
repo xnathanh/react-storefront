@@ -74,6 +74,10 @@ yarn release
 
 ## Changelog
 
+### 6.67.1
+
+- Fixes a bug where `Link` elements with a `to` prop that points to a `fromOrigin` route do not work.
+
 ### 6.67.0
 
 - You can now use `fromOrigin` and `redirectTo` in your router's `fallback` handler.
