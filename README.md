@@ -74,6 +74,10 @@ yarn release
 
 ## Changelog
 
+### 6.68.0
+
+- You can now disable preload headers by setting `sendPreloadHeaders` to `false` when calling `react-storefront-moov-xdn/index` from `scrips/index` in your project.
+
 ### 6.67.1
 
 - Fixes a bug where `Link` elements with a `to` prop that points to a `fromOrigin` route do not work.
