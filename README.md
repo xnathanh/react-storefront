@@ -81,6 +81,8 @@ yarn release
 Example:
 
 ```js
+// scripts/index.js
+
 console.error = console.warn = console.log
 
 module.exports = function() {
