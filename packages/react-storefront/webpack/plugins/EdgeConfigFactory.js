@@ -35,13 +35,14 @@ module.exports = class EdgeConfigFactory {
       const notes = `rsf: ${spec}`
 
       if (edgeHandler) {
-        request_router.push({ notes, path_regex, ...edgeHandler.config(route.path) })
-
-        if (cache && cache.edge && cache.edge.maxAgeSeconds) {
-          response_router.push({ notes, path_regex, ttl: `${cache.edge.maxAgeSeconds}s` })
-        }
+        const config = edgeHandler.config(route.path)
+        const maxAge = get(cache, 'edge.maxAgeSeconds')
+        const ttl = maxAge != null ? `${maxAge}s` : undefined
+        request_router.push({ notes, path_regex, ...config })
+        response_router.push({ notes, path_regex, ttl })
       } else {
         request_router.push({ notes, path_regex, proxy: { backend: 'moov' } })
+        response_router.push({ notes, path_regex })
       }
 
       if (cache && cache.edge && cache.edge.key) {

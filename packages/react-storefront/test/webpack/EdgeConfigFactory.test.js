@@ -271,20 +271,42 @@ describe('EdgeConfigFactory', () => {
 
       expect(response_router).toEqual([
         {
-          notes: expect.any(String),
-          path_regex: '^/foo\\.json(?=\\?|$)',
-          ttl: '500s'
+          notes: 'rsf: /.powerlinks.js.json',
+          path_regex: '^/\\.powerlinks\\.js\\.json(?=\\?|$)'
         },
         {
-          notes: expect.any(String),
-          path_regex: '^/foo\\.amp(?=\\?|$)',
-          ttl: '500s'
+          notes: 'rsf: /.powerlinks.js.amp',
+          path_regex: '^/\\.powerlinks\\.js\\.amp(?=\\?|$)'
+        },
+        { notes: 'rsf: /.powerlinks.js', path_regex: '^/\\.powerlinks\\.js(?=\\?|$)' },
+        { notes: 'rsf: /foo.json', path_regex: '^/foo\\.json(?=\\?|$)', ttl: '500s' },
+        { notes: 'rsf: /foo.amp', path_regex: '^/foo\\.amp(?=\\?|$)', ttl: '500s' },
+        { notes: 'rsf: /foo', path_regex: '^/foo(?=\\?|$)', ttl: '500s' },
+        { notes: 'rsf: __fallback__', path_regex: '.' }
+      ])
+    })
+
+    it('should support caching for falling back to origin', () => {
+      const router = new Router()
+        .get('/foo', fromServer('./foo'))
+        .fallback(cache({ edge: { maxAgeSeconds: 500 } }), fromOrigin('desktop'))
+
+      const { response_router } = new EdgeConfigFactory(router).createConfig().backends.moov
+
+      expect(response_router).toEqual([
+        {
+          notes: 'rsf: /.powerlinks.js.json',
+          path_regex: '^/\\.powerlinks\\.js\\.json(?=\\?|$)'
         },
         {
-          notes: expect.any(String),
-          path_regex: '^/foo(?=\\?|$)',
-          ttl: '500s'
-        }
+          notes: 'rsf: /.powerlinks.js.amp',
+          path_regex: '^/\\.powerlinks\\.js\\.amp(?=\\?|$)'
+        },
+        { notes: 'rsf: /.powerlinks.js', path_regex: '^/\\.powerlinks\\.js(?=\\?|$)' },
+        { notes: 'rsf: /foo.json', path_regex: '^/foo\\.json(?=\\?|$)' },
+        { notes: 'rsf: /foo.amp', path_regex: '^/foo\\.amp(?=\\?|$)' },
+        { notes: 'rsf: /foo', path_regex: '^/foo(?=\\?|$)' },
+        { notes: 'rsf: __fallback__', path_regex: '.', ttl: '500s' }
       ])
     })
 
