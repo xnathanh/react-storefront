@@ -74,6 +74,10 @@ yarn release
 
 ## Changelog
 
+### 6.69.0
+
+- Improved support for A/B testing. You can now use `fromOrigin` and `redirectTo` route handlers when running A/B tests.
+
 ### 6.68.0
 
 - You can now disable preload headers by setting `sendPreloadHeaders` to `false` when calling `react-storefront-moov-xdn/index` from `scripts/index` in your project.
