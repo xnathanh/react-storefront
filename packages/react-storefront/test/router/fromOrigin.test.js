@@ -8,7 +8,7 @@ describe('fromOrigin', () => {
   })
 
   it('should return an OEM route config', () => {
-    expect(fromOrigin('desktop').config()).toEqual({ proxy: { backend: 'desktop' } })
+    expect(fromOrigin('desktop').config()).toEqual({ proxy: { alternative_backend: 'desktop' } })
   })
 
   it('should support transformPath', () => {

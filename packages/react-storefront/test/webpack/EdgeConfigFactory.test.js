@@ -29,7 +29,7 @@ describe('EdgeConfigFactory', () => {
       const router = new Router().get('/', cacheHandler).get('/p/:id', cacheHandler)
       const config = new EdgeConfigFactory(router).createConfig()
 
-      expect(config.custom_cache_keys).toEqual([
+      expect(config.backends.moov.custom_cache_keys).toEqual([
         {
           notes: 'rsf: /.powerlinks.js.json',
           path_regex: '^/\\.powerlinks\\.js\\.json(?=\\?|$)'
@@ -179,34 +179,34 @@ describe('EdgeConfigFactory', () => {
         {
           notes: 'rsf: /.powerlinks.js.json',
           path_regex: '^/\\.powerlinks\\.js\\.json(?=\\?|$)',
-          proxy: { backend: 'moov' }
+          proxy: { alternative_backend: 'moov' }
         },
         {
           notes: 'rsf: /.powerlinks.js.amp',
           path_regex: '^/\\.powerlinks\\.js\\.amp(?=\\?|$)',
-          proxy: { backend: 'moov' }
+          proxy: { alternative_backend: 'moov' }
         },
         {
           notes: 'rsf: /.powerlinks.js',
           path_regex: '^/\\.powerlinks\\.js(?=\\?|$)',
-          proxy: { backend: 'moov' }
+          proxy: { alternative_backend: 'moov' }
         },
         {
           notes: 'rsf: /foo.json',
           path_regex: '^/foo\\.json(?=\\?|$)',
-          proxy: { backend: 'desktop' }
+          proxy: { alternative_backend: 'desktop' }
         },
         {
           notes: 'rsf: /foo.amp',
           path_regex: '^/foo\\.amp(?=\\?|$)',
-          proxy: { backend: 'desktop' }
+          proxy: { alternative_backend: 'desktop' }
         },
         {
           notes: 'rsf: /foo',
           path_regex: '^/foo(?=\\?|$)',
-          proxy: { backend: 'desktop' }
+          proxy: { alternative_backend: 'desktop' }
         },
-        { notes: 'rsf: __fallback__', path_regex: '.', proxy: { backend: 'moov' } }
+        { notes: 'rsf: __fallback__', path_regex: '.', proxy: { alternative_backend: 'moov' } }
       ])
     })
 
@@ -216,37 +216,37 @@ describe('EdgeConfigFactory', () => {
         {
           notes: expect.any(String),
           path_regex: '^/\\.powerlinks\\.js\\.json(?=\\?|$)',
-          proxy: { backend: 'moov' }
+          proxy: { alternative_backend: 'moov' }
         },
         {
           notes: expect.any(String),
           path_regex: '^/\\.powerlinks\\.js\\.amp(?=\\?|$)',
-          proxy: { backend: 'moov' }
+          proxy: { alternative_backend: 'moov' }
         },
         {
           notes: expect.any(String),
           path_regex: '^/\\.powerlinks\\.js(?=\\?|$)',
-          proxy: { backend: 'moov' }
+          proxy: { alternative_backend: 'moov' }
         },
         {
           notes: expect.any(String),
           path_regex: '^/foo\\.json(?=\\?|$)',
-          proxy: { backend: 'moov' }
+          proxy: { alternative_backend: 'moov' }
         },
         {
           notes: expect.any(String),
           path_regex: '^/foo\\.amp(?=\\?|$)',
-          proxy: { backend: 'moov' }
+          proxy: { alternative_backend: 'moov' }
         },
         {
           notes: expect.any(String),
           path_regex: '^/foo(?=\\?|$)',
-          proxy: { backend: 'moov' }
+          proxy: { alternative_backend: 'moov' }
         },
         {
           notes: expect.any(String),
           path_regex: '.',
-          proxy: { backend: 'origin' }
+          proxy: { alternative_backend: 'origin' }
         }
       ])
     })
@@ -265,7 +265,7 @@ describe('EdgeConfigFactory', () => {
         notes: 'rsf: /foo',
         path_regex: '^/foo(?=\\?|$)',
         proxy: {
-          backend: 'desktop'
+          alternative_backend: 'desktop'
         }
       })
 
@@ -319,34 +319,34 @@ describe('EdgeConfigFactory', () => {
         {
           notes: 'rsf: /.powerlinks.js.json',
           path_regex: '^/\\.powerlinks\\.js\\.json(?=\\?|$)',
-          proxy: { backend: 'moov' }
+          proxy: { alternative_backend: 'moov' }
         },
         {
           notes: 'rsf: /.powerlinks.js.amp',
           path_regex: '^/\\.powerlinks\\.js\\.amp(?=\\?|$)',
-          proxy: { backend: 'moov' }
+          proxy: { alternative_backend: 'moov' }
         },
         {
           notes: 'rsf: /.powerlinks.js',
           path_regex: '^/\\.powerlinks\\.js(?=\\?|$)',
-          proxy: { backend: 'moov' }
+          proxy: { alternative_backend: 'moov' }
         },
         {
           notes: 'rsf: /foo/:cat/:id.json',
           path_regex: '^/foo/([^/\\?]+)/([^/\\?]+)\\.json(?=\\?|$)',
-          proxy: { backend: 'desktop', rewrite_path_regex: '/bar/\\1/\\2' }
+          proxy: { alternative_backend: 'desktop', rewrite_path_regex: '/bar/\\1/\\2' }
         },
         {
           notes: 'rsf: /foo/:cat/:id.amp',
           path_regex: '^/foo/([^/\\?]+)/([^/\\?]+)\\.amp(?=\\?|$)',
-          proxy: { backend: 'desktop', rewrite_path_regex: '/bar/\\1/\\2' }
+          proxy: { alternative_backend: 'desktop', rewrite_path_regex: '/bar/\\1/\\2' }
         },
         {
           notes: 'rsf: /foo/:cat/:id',
           path_regex: '^/foo/([^/\\?]+)/([^/\\?]+)(?=\\?|$)',
-          proxy: { backend: 'desktop', rewrite_path_regex: '/bar/\\1/\\2' }
+          proxy: { alternative_backend: 'desktop', rewrite_path_regex: '/bar/\\1/\\2' }
         },
-        { notes: 'rsf: __fallback__', path_regex: '.', proxy: { backend: 'moov' } }
+        { notes: 'rsf: __fallback__', path_regex: '.', proxy: { alternative_backend: 'moov' } }
       ])
     })
 
@@ -363,7 +363,7 @@ describe('EdgeConfigFactory', () => {
         notes: 'rsf: /foo/:x/:y',
         path_regex: '^/foo/([^/\\?]+)/([^/\\?]+)(?=\\?|$)',
         proxy: {
-          backend: 'desktop',
+          alternative_backend: 'desktop',
           rewrite_path_regex: '/bar/\\1/\\2/\\1'
         }
       })
@@ -388,7 +388,7 @@ describe('EdgeConfigFactory', () => {
         notes: 'rsf: /foo/:x',
         path_regex: '^/foo/([^/\\?]+)(?=\\?|$)',
         proxy: {
-          backend: 'desktop',
+          alternative_backend: 'desktop',
           rewrite_path_regex: '\\1/bar'
         }
       })
@@ -405,7 +405,7 @@ describe('EdgeConfigFactory', () => {
         notes: 'rsf: /foo/:x',
         path_regex: '^/foo/([^/\\?]+)(?=\\?|$)',
         proxy: {
-          backend: 'desktop',
+          alternative_backend: 'desktop',
           rewrite_path_regex: '/bar\\1'
         }
       })
@@ -463,7 +463,7 @@ describe('EdgeConfigFactory', () => {
         notes: 'rsf: /foo/:x',
         path_regex: '^/foo/([^/\\?]+)(?=\\?|$)',
         proxy: {
-          backend: 'desktop',
+          alternative_backend: 'desktop',
           rewrite_path_regex: '/bar/\\{x}/\\1'
         }
       })

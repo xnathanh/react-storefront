@@ -41,7 +41,7 @@ module.exports = class EdgeConfigFactory {
         request_router.push({ notes, path_regex, ...config })
         response_router.push({ notes, path_regex, ttl })
       } else {
-        request_router.push({ notes, path_regex, proxy: { backend: 'moov' } })
+        request_router.push({ notes, path_regex, proxy: { alternative_backend: 'moov' } })
         response_router.push({ notes, path_regex })
       }
 
@@ -53,9 +53,9 @@ module.exports = class EdgeConfigFactory {
     })
 
     return {
-      custom_cache_keys,
       backends: {
         moov: {
+          custom_cache_keys,
           request_router,
           response_router
         }
