@@ -1,5 +1,11 @@
+/**
+ * @license
+ * Copyright © 2017-2018 Moov Corporation.  All rights reserved.
+ */
+
 const { RawSource } = require('webpack-sources')
 const requireFromString = require('require-from-string')
+const EdgeConfigFactory = require('./EdgeConfigFactory')
 
 module.exports = class OEMConfigWriterPlugin {
   constructor({ outputFile }) {
@@ -18,13 +24,13 @@ module.exports = class OEMConfigWriterPlugin {
       // We load transpiled routes.js from memory and not from the file, because the file is not yet writter
       // at 'emit' compiler hook time.
       // We could have used the 'done' hook, but that makes it harder to emit to resulting oem.json file.
-      const routes = requireFromString(compilation.assets['routes.js'].source()).default
+      const router = requireFromString(compilation.assets['routes.js'].source()).default
 
       // This was just included for this step, but not used in final build
       delete compilation.assets['routes.js']
       delete compilation.assets['routes.js.map']
 
-      const OEMConfig = routes.createEdgeConfiguration()
+      const OEMConfig = new EdgeConfigFactory(router).createConfig()
       const OEMConfigJson = JSON.stringify(OEMConfig)
 
       if (OEMConfigJson !== this.previousOEMConfigJson) {
