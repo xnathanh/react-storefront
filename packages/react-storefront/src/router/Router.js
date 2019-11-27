@@ -245,7 +245,7 @@ export default class Router extends EventEmitter {
    * @return {Boolean}
    */
   willCacheOnClient(request) {
-    const { match } = this.findMatchingRoute(request)
+    const { match } = this.findMatchingRoute(request) || { handlers: this.fallbackHandlers }
     return this.isClientCachingEnabled(match)
   }
 
