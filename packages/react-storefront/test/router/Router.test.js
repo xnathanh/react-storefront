@@ -785,7 +785,7 @@ describe('Router:Node', function() {
       expect(router.willCacheOnClient({ path: '/p/1.json' })).toBe(true)
     })
 
-    it('should return true if the route has a cache handler with client: true in the fallback route', () => {
+    it.only('should return true if the route has a cache handler with client: true in the fallback route', () => {
       router.fallback(cache({ client: true }))
       expect(router.willCacheOnClient({ path: '/p/1.json' })).toBe(true)
     })
