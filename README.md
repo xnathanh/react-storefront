@@ -74,6 +74,10 @@ yarn release
 
 ## Changelog
 
+### 6.69.0
+
+- Added ability to pass props into `Tab` component from `NavTab`
+
 ### 6.68.1
 
 - Fixed a bug that prevented prefetching fallback routes.
