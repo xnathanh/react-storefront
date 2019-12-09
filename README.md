@@ -74,6 +74,10 @@ yarn release
 
 ## Changelog
 
+### 6.69.1
+
+- Fixed security vulnerability by upgrading Lodash
+
 ### 6.69.0
 
 - Added ability to pass props into `Tab` component from `NavTab`
