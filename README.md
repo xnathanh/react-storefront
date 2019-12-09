@@ -74,6 +74,10 @@ yarn release
 
 ## Changelog
 
+### 6.70.0
+
+- Added `zoomSrc` to `MediaTypeModel`. Use `zoomSrc` to specify a separate high-resolution URL to display when the user activates the pinch/zoom modal on the PDP.
+
 ### 6.69.1
 
 - Fixed security vulnerability by upgrading Lodash
