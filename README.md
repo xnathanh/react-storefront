@@ -74,7 +74,7 @@ yarn release
 
 ## Changelog
 
-### 6.66.0
+### 6.71.0
 
 - You can now use the stale-while-revalidate caching strategy at the edge by specifying `staleWhileRevalidateSeconds`:
 
