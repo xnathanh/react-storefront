@@ -55,7 +55,8 @@ export default class Response {
    */
   cache = {
     browserMaxAge: 0,
-    serverMaxAge: 0
+    serverMaxAge: 0,
+    serverStaleWhileRevalidate: 0
   }
 
   /**
@@ -173,16 +174,27 @@ export default class Response {
   }
 
   /**
-   * Caches the response on the server
-   * @param {Number} maxAgeSeconds The time the entry should live in the cache in seconds
+   * The same as cacheAtEdge.  This method is deprecated but was left in for backwards
+   * compatbility with earlier versions of React Storefront
    * @return {Response} this
    */
-  cacheOnServer(maxAgeSeconds) {
+  cacheOnServer(options) {
+    return this.cacheAtEdge(options)
+  }
+
+  /**
+   * Caches the response on the server
+   * @param {Number} maxAgeSeconds The time the entry should live in the cache in seconds
+   * @param {Number} staleWhileRevalidateSeconds The time the entry should live before being refreshed in seconds.
+   * @return {Response} this
+   */
+  cacheAtEdge({ maxAgeSeconds, staleWhileRevalidateSeconds }) {
     if (maxAgeSeconds == null)
-      throw new Error('maxAgeSeconds cannot be null in call to response.cacheOnServer')
+      throw new Error('You must specify maxAgeSeconds when calling response.cacheOnServer.')
 
     this.cache = {
       serverMaxAge: maxAgeSeconds,
+      serverStaleWhileRevalidate: staleWhileRevalidateSeconds,
       browserMaxAge: 0
     }
 

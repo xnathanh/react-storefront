@@ -33,7 +33,8 @@ describe('Response', () => {
         cookies: [],
         cache: {
           browserMaxAge: 0,
-          serverMaxAge: 0
+          serverMaxAge: 0,
+          serverStaleWhileRevalidate: 0
         },
         headers: {
           'x-moov-test': 'test'
@@ -61,7 +62,8 @@ describe('Response', () => {
         ],
         cache: {
           browserMaxAge: 0,
-          serverMaxAge: 0
+          serverMaxAge: 0,
+          serverStaleWhileRevalidate: 0
         }
       })
     })
@@ -83,7 +85,8 @@ describe('Response', () => {
         headers: {},
         cache: {
           browserMaxAge: 0,
-          serverMaxAge: 0
+          serverMaxAge: 0,
+          serverStaleWhileRevalidate: 0
         }
       })
     })
@@ -109,22 +112,42 @@ describe('Response', () => {
     })
   })
 
-  describe('cacheOnServer', () => {
-    it('should set the cache-control header', () => {
-      response.cacheOnServer(100)
-      expect(response.cache).toEqual({ browserMaxAge: 0, serverMaxAge: 100 })
+  describe('cacheAtEdge', () => {
+    it('should set the maxAgeSeconds', () => {
+      response.cacheAtEdge({ maxAgeSeconds: 100, staleWhileRevalidateSeconds: 0 })
+      expect(response.cache).toEqual({
+        browserMaxAge: 0,
+        serverMaxAge: 100,
+        serverStaleWhileRevalidate: 0
+      })
+    })
+
+    it('should set staleWhileRevalidateSeconds', () => {
+      response.cacheAtEdge({ staleWhileRevalidateSeconds: 100, maxAgeSeconds: 0 })
+      expect(response.cache).toEqual({
+        browserMaxAge: 0,
+        serverMaxAge: 0,
+        serverStaleWhileRevalidate: 100
+      })
     })
 
     it('should set the cache-control header to no-store, no-cache, maxage=0 by default', () => {
-      expect(response.cache).toEqual({ browserMaxAge: 0, serverMaxAge: 0 })
+      expect(response.cache).toEqual({
+        browserMaxAge: 0,
+        serverMaxAge: 0,
+        serverStaleWhileRevalidate: 0
+      })
     })
 
     it('should return the response', () => {
-      expect(response.cacheOnServer(100)).toBe(response)
+      expect(response.cacheAtEdge({ maxAgeSeconds: 100 })).toBe(response)
+      expect(response.cacheAtEdge({ maxAgeSeconds: 100, staleWhileRevalidateSeconds: 100 })).toBe(
+        response
+      )
     })
 
     it('should throw an Error if no parameter is provided', () => {
-      expect(() => response.cacheOnServer()).toThrow()
+      expect(() => response.cacheAtEdge()).toThrow()
     })
   })
 

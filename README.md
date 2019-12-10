@@ -74,6 +74,21 @@ yarn release
 
 ## Changelog
 
+### 6.71.0
+
+- You can now use the stale-while-revalidate caching strategy at the edge by specifying `staleWhileRevalidateSeconds`:
+
+```js
+router.get(
+  '/p/:id',
+  cache({
+    edge: {
+      staleWhileRevalidateSeconds: 24 * 60 * 60
+    }
+  })
+)
+```
+
 ### 6.70.0
 
 - Added `zoomSrc` to `MediaTypeModel`. Use `zoomSrc` to specify a separate high-resolution URL to display when the user activates the pinch/zoom modal on the PDP.
