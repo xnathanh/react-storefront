@@ -4,24 +4,20 @@
  */
 
 import flatten from 'lodash/flatten'
+
 /**
  * @private
  */
 const QS_MODE_BLACKLIST = 'blacklist'
 const QS_MODE_WHITELIST = 'whitelist'
-class CustomCacheKey {
-  headers = []
 
+class CustomCacheKey {
   queryParametersMode = QS_MODE_BLACKLIST
   queryParameterslist = []
   queryParametersChanged = false
 
+  headers = []
   cookies = {}
-
-  addHeader(name) {
-    this.headers.push(name)
-    return this
-  }
 
   excludeAllQueryParameters() {
     this._preventQueryParametersConflict()
@@ -47,14 +43,26 @@ class CustomCacheKey {
     return this
   }
 
-  addCookie(name, createPartitions) {
-    const cookie = new CookieConfig()
-
+  addHeader(name, createPartitions) {
     if (typeof createPartitions === 'function') {
-      createPartitions(cookie)
+      const partitions = new Partitions()
+      createPartitions(partitions)
+      this.headers.push({ name, partitions: partitions.toJSON() })
+    } else {
+      this.headers.push(name)
     }
 
-    this.cookies[name] = cookie.toJSON()
+    return this
+  }
+
+  addCookie(name, createPartitions) {
+    const partitions = new Partitions()
+
+    if (typeof createPartitions === 'function') {
+      createPartitions(partitions)
+    }
+
+    this.cookies[name] = partitions.toJSON()
 
     return this
   }
@@ -101,7 +109,7 @@ class CustomCacheKey {
 /**
  * @private
  */
-class CookieConfig {
+class Partitions {
   partitions = []
   name = null
 
