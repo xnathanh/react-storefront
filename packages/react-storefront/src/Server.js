@@ -86,6 +86,10 @@ export default class Server {
         this.router.on('error', reportError)
         state = await this.router.runAll(request, response)
 
+        if (requestContext.get('synthetic')) {
+          response.set('x-moov-synthetic', true)
+        }
+
         if (!state.proxyUpstream && !response.headersSent) {
           await this.renderPWA({ request, response, state, history })
         }
