@@ -5,6 +5,7 @@
 import React from 'react'
 import { createBrowserHistory } from 'history'
 import hydrate from './utils/hydrate'
+import scheduleHydration from './utils/scheduleHydration'
 import registerServiceWorker, { unregister } from './registerServiceWorker'
 import PWA from './PWA'
 
@@ -27,9 +28,10 @@ export default function launchClient({
   target = document.getElementById('root'),
   errorReporter = Function.prototype,
   serviceWorker = true,
-  delayHydrationUntilPageLoad = false
+  delayHydrationUntilPageLoad = false,
+  additionalDelay
 }) {
-  scheduleHydration(delayHydrationUntilPageLoad, () => {
+  scheduleHydration(delayHydrationUntilPageLoad, additionalDelay, () => {
     const history = createBrowserHistory()
 
     hydrate({
@@ -52,18 +54,5 @@ export default function launchClient({
     registerServiceWorker()
   } else {
     unregister()
-  }
-}
-
-/**
- * Schedules hydration based on the specified options
- * @param {Boolean} options.delayHydrationUntilPageLoad If `true` hydration will not occur until the window load event.  This helps improve initial page load time, especially largest image render.
- * @param {Function} delayHydrationUntilPageLoad A function that hydrates the react app
- */
-function scheduleHydration(delayHydrationUntilPageLoad, hydrate) {
-  if (delayHydrationUntilPageLoad && document.readyState !== 'complete') {
-    return window.addEventListener('load', hydrate, { once: true })
-  } else {
-    hydrate()
   }
 }

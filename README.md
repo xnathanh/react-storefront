@@ -74,11 +74,114 @@ yarn release
 
 ## Changelog
 
+### 6.70.0
+
+- Added `zoomSrc` to `MediaTypeModel`. Use `zoomSrc` to specify a separate high-resolution URL to display when the user activates the pinch/zoom modal on the PDP.
+
+### 6.69.1
+
+- Fixed security vulnerability by upgrading Lodash
+
+### 6.69.0
+
+- Added ability to pass props into `Tab` component from `NavTab`
+
+### 6.68.1
+
+- Fixed a bug that prevented prefetching fallback routes.
+
+### 6.68.0
+
+- You can now disable preload headers by setting `sendPreloadHeaders` to `false` when calling `react-storefront-moov-xdn/index` from `scripts/index` in your project.
+
+Example:
+
+```js
+// scripts/index.js
+
+console.error = console.warn = console.log
+
+module.exports = function() {
+  require('../src/analytics')
+
+  const index = require('react-storefront-moov-xdn').default
+  const { transformAmpHtml } = require('react-storefront-extensions/amp')
+  const errorReporter = require('../src/errorReporter').default
+
+  index({
+    theme: require('../src/theme').default,
+    model: require('../src/AppModel').default,
+    App: require('../src/App').default,
+    router: require('../src/routes').default,
+    blob: env.blob || require('../src/blob.dev'),
+    transform: transformAmpHtml,
+    errorReporter,
+    sendPreloadHeaders: false
+  })
+}
+```
+
+### 6.67.1
+
+- Fixes a bug where `Link` elements with a `to` prop that points to a `fromOrigin` route do not work.
+
+### 6.67.0
+
+- You can now use `fromOrigin` and `redirectTo` in your router's `fallback` handler.
+
+### 6.66.0
+
+- You can now group multiple header values when creating a custom edge cache key.
+
+Example:
+
+```js
+cache({
+  edge: {
+    maxAgeSeconds: 1000,
+    key: createCustomCacheKey()
+      .addHeader('x-moov-xdn-device')
+      .addHeader('country', header => {
+        header.partition('na').byPattern('us|ca')
+        header.partition('eur').byPattern('de|fr|ee')
+      })
+  }
+})
+```
+
+### 6.65.3
+
+- Improves `utils/batchPromises` concurrent execution.
+
+### 6.65.2
+
+`fetch` calls made in handler functions now forward the `x-forwarded-for` request header automatically.
+
+### 6.65.1
+
+- You can now use `fromOrigin` in local development. In local development `fromOrigin` simply uses `proxyUpstream()` with no arguments.
+
+### 6.65.0
+
+- Adds support for `router.fallback(fromOrigin())` and `router.fallback(redirectTo(url))`
+- Adds `client` and `server` props to `<Lazy/>`, giving you the option to fully render a page on the server while making some components lazy during client side navigation.
+- Fixes AMP validation errors on AmpDrawer
+
+### 6.64.1
+
+- Fixes `additionalDelay` bug which caused hydration before load
+
+### 6.64.0
+
+- Adds the ability to cache routes with a `fromOrigin` handler.
+- `withPersonalization` will no longer fire the supplied callback unless the parent page component is visible.
+- Added `additionalDelay` option to launch client to further delay hydration after page load.
+
 ### 6.63.0
 
-- Removed css optimization libraries to improve server execution times
-- Optimized generating links for SEO in Menu
-- Production server build now uses terser
+- Optimized css minification to reduce request handling time.
+- Optimized generating links for SEO in Menu.
+- Production server build now uses terser.
 
 ### 6.62.2
 

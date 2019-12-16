@@ -7,11 +7,10 @@ export default async function profile(header, cb) {
   const result = await cb()
   const end = new Date().getTime()
 
-  if (env.rsf_response) {
+  if (env.rsf_response && env.moov_debug === 'true') {
     env.rsf_response.set(header, end - start)
   }
 
-  console.log(header, end - start)
   return result
 }
 

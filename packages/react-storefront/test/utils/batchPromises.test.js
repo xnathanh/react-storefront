@@ -2,20 +2,18 @@ import batchPromises from '../../src/utils/batchPromises'
 
 describe('batchPromises', () => {
   it('should call the fn with all supplied inputs', async () => {
-    const fn = jest.fn()
-    const executionTimes = []
+    const resolved = []
+    const inputs = [100, 200, 200, 100, 100, 100, 200, 200, 100, 1, 1, 1, 200, 100]
 
-    await batchPromises(2, [0, 1, 2, 3, 4], input => {
+    await batchPromises(7, inputs, input => {
       return new Promise((resolve, reject) => {
-        executionTimes.push(new Date().getTime())
-
         setTimeout(() => {
-          fn(input)
+          resolved.push(input)
           resolve()
-        }, 100)
+        }, input)
       })
     })
 
-    expect(executionTimes[2] - executionTimes[1]).toBeGreaterThanOrEqual(99)
+    expect(inputs.length).toBe(resolved.length)
   })
 })

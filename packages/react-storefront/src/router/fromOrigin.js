@@ -4,12 +4,13 @@
  */
 
 import transformParams from './transformParams'
+import proxyUpstream from './proxyUpstream'
 
 async function fn(params, request, response) {
   throw new Error('fromOrigin is only supported when running in the Moovweb XDN.')
 }
 
-export default function fromOrigin(backend) {
+export default function fromOrigin(backend = 'origin') {
   const type = 'fromOrigin'
   const config = {
     proxy: {
@@ -17,6 +18,11 @@ export default function fromOrigin(backend) {
     }
   }
   const runOn = { server: true, client: false }
+
+  if (process.env.MOOV_ENV === 'development') {
+    // perfect proxy in development since we have no CDN
+    return proxyUpstream()
+  }
 
   return {
     type,
