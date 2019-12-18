@@ -384,6 +384,11 @@ export default class Router extends EventEmitter {
         }
       }
 
+      // skip state handlers on initial hydration - we just need to run cache and we've already run it above
+      if (initialLoad) {
+        return
+      }
+
       for (let handler of handlers) {
         if (typeof handler === 'function') {
           handler = {
