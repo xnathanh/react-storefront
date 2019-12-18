@@ -384,11 +384,6 @@ export default class Router extends EventEmitter {
         }
       }
 
-      // skip state handlers on initial hydration - we just need to run cache and we've already run it above
-      if (initialLoad) {
-        return
-      }
-
       for (let handler of handlers) {
         if (typeof handler === 'function') {
           handler = {
@@ -614,7 +609,7 @@ export default class Router extends EventEmitter {
     const request = { path: pathname, search, query: qs.parse(search), method: 'GET' }
     const context = new ClientContext(request)
 
-    this.runAll(request, context, { initialLoad: true }, window.initialState)
+    // this.runAll(request, context, { initialLoad: true }, window.initialState)
     this.emit('after', { request, response: context, initialLoad: true })
 
     return this
