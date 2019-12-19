@@ -74,9 +74,42 @@ yarn release
 
 ## Changelog
 
+### 6.69.0-alpha.1
+
+- Merging with 6.70.2.
+
+### 6.70.2
+
+- `fetchWithCookies` will no longer URI encode cookies when running in a handler with a custom cache key that splits the cache by cookie. URI encoding cookies is not standard and breaks some back ends.
+- Fixed sharing URLs for all `SocialShareButtons` types
+
+### 6.70.1
+
+- Fixed infinite reloading in proxied pages. Not running handlers from `Router.watch` on page load anymore.
+
+### 6.70.0
+
+- Added `zoomSrc` to `MediaTypeModel`. Use `zoomSrc` to specify a separate high-resolution URL to display when the user activates the pinch/zoom modal on the PDP.
+
+### 6.69.1
+
+- Fixed security vulnerability by upgrading Lodash
+
 ### 6.69.0
 
+- Added ability to pass props into `Tab` component from `NavTab`
+
+### 6.69.0-alpha.0
+
 - Improved support for A/B testing. You can now use `fromOrigin` and `redirectTo` route handlers when running A/B tests.
+
+### 6.68.2
+
+- Rolls back 6.68.1, which it turns out was unnecessary.
+
+### 6.68.1
+
+- Fixed a bug that prevented prefetching fallback routes.
 
 ### 6.68.0
 
