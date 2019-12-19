@@ -76,6 +76,7 @@ yarn release
 
 ### 6.70.2
 
+- `fetchWithCookies` will no longer URI encode cookies when running in a handler with a custom cache key that splits the cache by cookie. URI encoding cookies is not standard and breaks some back ends.
 - Fixed sharing URLs for all `SocialShareButtons` types
 
 ### 6.70.1
