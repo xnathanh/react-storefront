@@ -74,6 +74,10 @@ yarn release
 
 ## Changelog
 
+### 6.70.2
+
+- Fixed sharing URLs for all `SocialShareButtons` types
+
 ### 6.70.1
 
 - Fixed infinite reloading in proxied pages. Not running handlers from `Router.watch` on page load anymore.
