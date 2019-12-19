@@ -189,6 +189,8 @@ export default class Server {
         response.set('link', scripts.map(renderPreloadHeader).join(', '))
       }
 
+      const codeToInjectInHead = requestContext.get('codeToInjectInHead') || []
+
       html = `
         <!DOCTYPE html>
         <html ${helmet.htmlAttributes.toString()}>
@@ -219,6 +221,7 @@ export default class Server {
                 defer: this.deferScripts
               })}
               ${scripts.map(src => renderScript(src, this.deferScripts)).join('')}
+              ${codeToInjectInHead.map(code => `<script>${code}</script>`).join('')}
             `
             }
           </body>

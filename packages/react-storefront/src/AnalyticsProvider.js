@@ -71,8 +71,11 @@ export default class AnalyticsProvider extends Component {
 
   constructor(props) {
     super(props)
-    // Configure analytics for server side AMP rendering
-    if (props.targets && props.amp) {
+
+    console.log('analytics provider')
+
+    // Configure analytics for SSR
+    if (props.targets) {
       configureAnalytics(...props.targets(false))
     }
   }
