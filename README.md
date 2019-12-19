@@ -76,7 +76,7 @@ yarn release
 
 ### 6.70.1
 
-- Fixed infinite reloading in proxied pages. Not running handlers in from `Router.watch` anymore
+- Fixed infinite reloading in proxied pages. Not running handlers from `Router.watch` on page load anymore.
 
 ### 6.70.0
 
