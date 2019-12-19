@@ -74,6 +74,10 @@ yarn release
 
 ## Changelog
 
+### 6.70.1
+
+- Fixed infinite reloading in proxied pages. Not running handlers from `Router.watch` on page load anymore.
+
 ### 6.70.0
 
 - Added `zoomSrc` to `MediaTypeModel`. Use `zoomSrc` to specify a separate high-resolution URL to display when the user activates the pinch/zoom modal on the PDP.

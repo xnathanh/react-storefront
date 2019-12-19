@@ -572,6 +572,15 @@ describe('Router:Node', function() {
   })
 
   describe('watch', () => {
+    it('should not call any handlers until history changes', () => {
+      process.env.MOOV_RUNTIME = 'client'
+      const history = createMemoryHistory()
+      history.push('/search')
+      const handler = jest.fn()
+      new Router().get('/search', handler).watch(history, jest.fn())
+      expect(handler).not.toHaveBeenCalled()
+    })
+
     it('should run route when history changes', () => {
       const history = createMemoryHistory()
       history.push('/')
@@ -785,7 +794,7 @@ describe('Router:Node', function() {
       expect(router.willCacheOnClient({ path: '/p/1.json' })).toBe(true)
     })
 
-    it.only('should return true if the route has a cache handler with client: true in the fallback route', () => {
+    it('should return true if the route has a cache handler with client: true in the fallback route', () => {
       router.fallback(cache({ client: true }))
       expect(router.willCacheOnClient({ path: '/p/1.json' })).toBe(true)
     })
