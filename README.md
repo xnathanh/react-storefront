@@ -74,6 +74,10 @@ yarn release
 
 ## Changelog
 
+### 6.71.0
+
+- Added support for the new image optimizer, review `imageService` for information about transitioning
+
 ### 6.70.2
 
 - `fetchWithCookies` will no longer URI encode cookies when running in a handler with a custom cache key that splits the cache by cookie. URI encoding cookies is not standard and breaks some back ends.
