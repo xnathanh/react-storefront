@@ -3,6 +3,17 @@
  * Copyright © 2017-2019 Moov Corporation.  All rights reserved.
  */
 let installed = false
+let messageQueue = []
+
+const messageSw = payload => {
+  if (installed) {
+    if (navigator.serviceWorker.controller) {
+      navigator.serviceWorker.controller.postMessage(payload)
+    }
+  } else {
+    messageQueue.push(payload)
+  }
+}
 
 /**
  * @license
@@ -14,26 +25,24 @@ let installed = false
  * @param {String} path The URI path of the request
  * @param {String} cacheData The data to cache
  */
-export async function cache(path, cacheData) {
-  if (await waitForServiceWorkerController()) {
-    const { apiVersion } = window.moov || {}
+export function cache(path, cacheData) {
+  const { apiVersion } = window.moov || {}
 
-    if (window.moov.router && !window.moov.router.willCacheOnClient({ path })) {
-      // Never cache a path unless it matches a route with a cache handler
-      // otherwise we could wind up caching pages like the cart that are not cacheable
-      return
-    }
+  if (window.moov.router && !window.moov.router.willCacheOnClient({ path })) {
+    // Never cache a path unless it matches a route with a cache handler
+    // otherwise we could wind up caching pages like the cart that are not cacheable
+    return
+  }
 
-    if (cacheData) {
-      navigator.serviceWorker.controller.postMessage({
-        action: 'cache-state',
-        path,
-        apiVersion,
-        cacheData
-      })
-    } else {
-      navigator.serviceWorker.controller.postMessage({ action: 'cache-path', path, apiVersion })
-    }
+  if (cacheData) {
+    messageSw({
+      action: 'cache-state',
+      path,
+      apiVersion,
+      cacheData
+    })
+  } else {
+    messageSw({ action: 'cache-path', path, apiVersion })
   }
 }
 
@@ -70,19 +79,15 @@ export function prefetch(path) {
  * Aborts all in progress prefetches.  Call this function to prevent prefetching from blocking
  * more important requests, like page navigation.
  */
-export async function abortPrefetches() {
-  if (await waitForServiceWorkerController()) {
-    navigator.serviceWorker.controller.postMessage({ action: 'abort-prefetches' })
-  }
+export function abortPrefetches() {
+  messageSw({ action: 'abort-prefetches' })
 }
 
 /**
  * Resume queued prefetch requests which were cancelled to allow for more important requests
  */
-export async function resumePrefetches() {
-  if (await waitForServiceWorkerController()) {
-    navigator.serviceWorker.controller.postMessage({ action: 'resume-prefetches' })
-  }
+export function resumePrefetches() {
+  messageSw({ action: 'resume-prefetches' })
 }
 
 /**
@@ -93,10 +98,8 @@ export async function resumePrefetches() {
  * @param {Object} options.maxEntries The max number of entries to store in the cache
  * @param {Object} options.maxAgeSeconds The TTL in seconds for entries
  */
-export async function configureCache(options) {
-  if (await waitForServiceWorkerController()) {
-    navigator.serviceWorker.controller.postMessage({ action: 'configure-runtime-caching', options })
-  }
+export function configureCache(options) {
+  messageSw({ action: 'configure-runtime-caching', options })
 }
 
 /**
@@ -141,14 +144,12 @@ export async function waitForServiceWorkerController() {
  * are appropriate for the current version of the UI.
  * @private
  */
-export async function removeOldCaches() {
-  if (await waitForServiceWorkerController()) {
-    if (window.moov && window.moov.apiVersion) {
-      navigator.serviceWorker.controller.postMessage({
-        action: 'remove-old-caches',
-        apiVersion: window.moov.apiVersion
-      })
-    }
+export function removeOldCaches() {
+  if (window.moov && window.moov.apiVersion) {
+    messageSw({
+      action: 'remove-old-caches',
+      apiVersion: window.moov.apiVersion
+    })
   }
 }
 
@@ -171,5 +172,7 @@ export default {
 if (typeof window !== 'undefined') {
   waitForServiceWorkerController().then(() => {
     installed = true
+    messageQueue.map(messageSw)
+    messageQueue = []
   })
 }
