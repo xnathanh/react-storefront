@@ -23,7 +23,7 @@ let optimizerUrlBase = LEGACY_IMAGE_SERVICE
 
 /**
  * Changes the base URL for the Moovweb image service.
- * @param {String} url Use `LEGACY_IMAGE_OPTIMIZER` or `RESPONSIVE_IMAGE_OPTIMIZER`.
+ * @param {String} url Use `LEGACY_IMAGE_SERVICE` or `XDN_IMAGE_SERVICE`.
  * @param {Object} options
  * @param {Object} options.version The version of the image optimizer API to use. Defaults to '1'
  */

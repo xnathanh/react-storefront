@@ -6,39 +6,28 @@
 import transformParams from './transformParams'
 import proxyUpstream from './proxyUpstream'
 
-async function fn(params, request, response) {
-  throw new Error('fromOrigin is only supported when running in the Moovweb XDN.')
-}
-
 export default function fromOrigin(alternative_backend = 'origin') {
   const type = 'fromOrigin'
+
   const config = {
     proxy: {
       alternative_backend
     }
   }
-  const runOn = { server: true, client: false }
 
-  if (process.env.MOOV_ENV === 'development') {
-    // perfect proxy in development since we have no CDN
-    return proxyUpstream()
-  }
-
-  return {
+  const result = {
+    ...proxyUpstream(),
     type,
-    runOn,
-    config: () => config,
-    transformPath: path => {
-      return {
-        type,
-        runOn,
-        config: routePath => {
-          config.proxy.rewrite_path_regex = transformParams(routePath, path)
-          return config
-        },
-        fn
-      }
-    },
-    fn
+    config: () => config
   }
+
+  result.transformPath = path => ({
+    ...result,
+    config: routePath => {
+      config.proxy.rewrite_path_regex = transformParams(routePath, path)
+      return config
+    }
+  })
+
+  return result
 }
