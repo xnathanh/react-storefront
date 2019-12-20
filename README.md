@@ -74,6 +74,10 @@ yarn release
 
 ## Changelog
 
+### 6.71.1
+
+- Fixed support for hydration of multiple components on adapt pages
+
 ### 6.71.0
 
 - Added support for the new image optimizer, review `imageService` for information about transitioning
