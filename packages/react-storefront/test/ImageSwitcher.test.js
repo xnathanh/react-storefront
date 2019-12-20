@@ -325,4 +325,19 @@ describe('ImageSwitcher', () => {
         .prop('alt')
     ).toEqual('red shirt thumbnail')
   })
+
+  it('uses zoomSrc when provided for the zoom viewer', () => {
+    const wrapper = mount(
+      <TestProvider>
+        <ImageSwitcher
+          product={{
+            name: 'Red Shirt',
+            images: [{ src: 'test.jpg', zoomSrc: 'test-zoom.jpg' }]
+          }}
+        />
+      </TestProvider>
+    )
+
+    expect(wrapper.find('ReactPinchZoomPan img[src="test-zoom.jpg"]')).toHaveLength(1)
+  })
 })

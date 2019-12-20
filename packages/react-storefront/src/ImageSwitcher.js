@@ -599,7 +599,7 @@ export default class ImageSwitcher extends Component {
                                 this.selectedVideo = el
                               }
                             }}
-                            src={selectedImage.src}
+                            src={selectedImage.zoomSrc || selectedImage.src}
                             alt={selectedImage.alt}
                             style={{
                               width: '100%',

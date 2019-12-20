@@ -607,7 +607,6 @@ export default class Router extends EventEmitter {
     const request = { path: pathname, search, query: qs.parse(search), method: 'GET' }
     const context = new ClientContext(request)
 
-    this.runAll(request, context, { initialLoad: true }, window.initialState)
     this.emit('after', { request, response: context, initialLoad: true })
 
     return this
