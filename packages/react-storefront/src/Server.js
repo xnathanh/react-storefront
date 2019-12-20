@@ -42,6 +42,7 @@ export default class Server {
     App,
     router,
     deferScripts = true,
+    delayScripts = 0,
     transform,
     errorReporter = Function.prototype,
     sendPreloadHeaders = true
@@ -54,6 +55,7 @@ export default class Server {
       App,
       router,
       deferScripts,
+      delayScripts,
       transform,
       errorReporter,
       sendPreloadHeaders
@@ -186,7 +188,30 @@ export default class Server {
       // Set prefetch headers so that our scripts will be fetched
       // and loaded as fast as possible
       if (this.sendPreloadHeaders) {
-        response.set('link', scripts.map(renderPreloadHeader).join(', '))
+        // response.set('link', scripts.map(renderPreloadHeader).join(', '))
+      }
+
+      let scriptBlock
+
+      if (this.delayScripts) {
+        scriptBlock = `
+        <script type="text/javascript">
+        setTimeout(()=>{
+          ${scripts
+            .map(
+              src => `
+            var s = document.createElement('script');
+            s.type = 'text/javascript';
+            s.src = '${src}';
+            document.getElementsByTagName('body')[0].appendChild(s);
+          `
+            )
+            .join('\n')}
+        },${this.delayScripts})
+        </script>
+        `
+      } else {
+        scriptBlock = scripts.map(src => renderScript(src, this.deferScripts)).join('')
       }
 
       html = `
@@ -218,12 +243,12 @@ export default class Server {
                 routeData: state,
                 defer: this.deferScripts
               })}
-              ${scripts.map(src => renderScript(src, this.deferScripts)).join('')}
-            `
+              ${scriptBlock}
+              `
             }
-          </body>
-        </html>
-      `
+            </body>
+            </html>
+            `
 
       if (typeof this.transform === 'function') {
         html = await this.transform(html, {

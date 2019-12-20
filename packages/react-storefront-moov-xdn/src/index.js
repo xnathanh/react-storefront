@@ -29,6 +29,8 @@ export default function responseRewriter({
   router,
   blob,
   transform,
+  deferScripts,
+  delayScripts,
   errorReporter = Function.prototype,
   sendPreloadHeaders = true
 }) {
@@ -47,9 +49,16 @@ export default function responseRewriter({
     const request = (env.rsf_request = new Request())
     const response = (env.rsf_response = new Response(request))
 
-    new Server({ theme, model, App, router, transform, errorReporter, sendPreloadHeaders }).serve(
-      request,
-      response
-    )
+    new Server({
+      theme,
+      model,
+      App,
+      router,
+      transform,
+      errorReporter,
+      sendPreloadHeaders,
+      deferScripts,
+      delayScripts
+    }).serve(request, response)
   }
 }

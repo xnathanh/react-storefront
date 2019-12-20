@@ -67,14 +67,14 @@ function createLoaders(sourcePath, { envName, assetsPath = '.', eslintConfig } =
       enforce: 'pre',
       include: sourcePath,
       use: [
-        {
-          loader: 'eslint-loader',
-          options: {
-            formatter: eslintFormatter,
-            eslintPath: require.resolve('eslint'),
-            baseConfig: eslintConfig
-          }
-        }
+        // {
+        //   loader: 'eslint-loader',
+        //   options: {
+        //     formatter: eslintFormatter,
+        //     eslintPath: require.resolve('eslint'),
+        //     baseConfig: eslintConfig
+        //   }
+        // }
       ]
     },
     {
