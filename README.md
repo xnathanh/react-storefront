@@ -74,6 +74,10 @@ yarn release
 
 ## Changelog
 
+### 6.72.0
+
+- Added `thumbnailImageProps` to `ImageSwitcher`
+
 ### 6.71.1
 
 - Fixed support for hydration of multiple components on adapt pages
