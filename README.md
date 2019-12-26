@@ -74,6 +74,10 @@ yarn release
 
 ## Changelog
 
+### 6.72.1
+
+- Fixed unhandled exceptions relating to service workers in Firefox and Safari.
+
 ### 6.72.0
 
 - Added `thumbnailImageProps` to `ImageSwitcher`
