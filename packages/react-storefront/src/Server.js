@@ -179,6 +179,7 @@ export default class Server {
       const chunks = flushChunkNames(stats)
 
       const scripts = flattenDeep([
+        getScripts({ stats, chunk: 'vendor' }),
         chunks.map(chunk => getScripts({ stats, chunk })),
         getScripts({ stats, chunk: 'main' })
       ])
