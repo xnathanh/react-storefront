@@ -4,15 +4,23 @@ const TerserPlugin = require('terser-webpack-plugin')
 /**
  * Creates the webpack optimization config for production and development builds.
  * @param {Object} options
- * @param {Boolean} options.production The production 
+ * @param {Boolean} options.production The production
  * @param {Object} options.overrides Overrides to be applied to the returned config
  * @return {Object}
  */
 module.exports = function createOptimization({ production = false, overrides = {} } = {}) {
-
   const optimization = {}
 
   if (production) {
+    optimization.splitChunks = {
+      cacheGroups: {
+        vendor: {
+          test: /[\\/]node_modules[\\/](react|react-dom|@material-ui|mobx|mobx-state-tree|lodash|jss)[\\/]/,
+          name: 'vendor',
+          chunks: 'all'
+        }
+      }
+    }
     optimization.minimize = true
     optimization.minimizer = [
       new TerserPlugin({
@@ -37,5 +45,4 @@ module.exports = function createOptimization({ production = false, overrides = {
   }
 
   return merge(optimization, overrides)
-
 }
