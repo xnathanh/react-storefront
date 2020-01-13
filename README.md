@@ -75,7 +75,7 @@ yarn release
 ## Changelog
 
 
-### 6.75.0 [diff](https://github.com/moovweb/react-storefront/compare/v6.74.1...v6.75.0)
+### 6.75.0 [diff](https://github.com/moovweb/react-storefront/compare/v6.74.0...v6.75.0)
 
 - Add support for `lazyOffset` on the `<Image />` component when horizontal scrolling
 - Allow requests of type `application/json` to be not be valid JSON. Requests of this type that contain unparsable JSON will now log a warning message rather than force the request to fail entirely.
