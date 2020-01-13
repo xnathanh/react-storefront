@@ -74,6 +74,11 @@ yarn release
 
 ## Changelog
 
+### 6.74.0 [diff](https://github.com/moovweb/react-storefront/compare/v6.73.0...v6.74.0)
+
+- Added `drawerProps` to `SearchDrawer`
+- Added `type` prop to `AmpCarousel`
+
 ### 6.73.0 [diff](https://github.com/moovweb/react-storefront/compare/v6.72.2...v6.73.0)
 
 - Improved support for A/B testing. You can now use `fromOrigin` and `redirectTo` route handlers when running A/B tests. This is done by moving the outer edge routing logic to the moov backend in oem.json
