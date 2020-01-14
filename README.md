@@ -74,7 +74,6 @@ yarn release
 
 ## Changelog
 
-
 ### 6.75.0 [diff](https://github.com/moovweb/react-storefront/compare/v6.74.0...v6.75.0)
 
 - Add support for `lazyOffset` on the `<Image />` component when horizontal scrolling
@@ -108,7 +107,8 @@ module.exports = edge(path.join(__dirname, '..', '..'), {
 
 ### 6.72.2 [diff](https://github.com/moovweb/react-storefront/compare/v6.72.1...v6.72.2)
 
-- Fixed issue with broken CSS after client-side navigation introduced in 6.71.1
+- Fixed issue with broken CSS after client-side navigation introduced in 6.71.1. You must upgrade to
+  react-storefront-extensions@7.17.1 when you upgrade to react-storefront@6.72.2 or newer.
 
 ### 6.72.1 [diff](https://github.com/moovweb/react-storefront/compare/v6.72.0...v6.72.1)
 
