@@ -74,6 +74,10 @@ yarn release
 
 ## Changelog
 
+### 6.77.0 [diff](https://github.com/moovweb/react-storefront/compare/v6.76.1...v6.77.0)
+
+- Added `Track` property to delay firing analytics events
+
 ### 6.76.1 [diff](https://github.com/moovweb/react-storefront/compare/v6.76.0...v6.76.1)
 
 - Fixes a bug where the `onClose` prop of `Menu` is not called when the menu is closed.
