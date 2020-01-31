@@ -263,7 +263,7 @@ export default class AmpImageSwitcher extends Component {
           // Do not refresh this state until a color has been interacted with
           amp-bind={`src=>${ampStateId}.colorInteracted ? '/images/${
             product.id
-          }' + moovAmpState.color.selected.id + '.json' : null`}
+          }/' + moovAmpState.color.selected.id + '.json' : null`}
         />
         <div className={classes.carouselWrap}>
           <BeforeInteracted>
