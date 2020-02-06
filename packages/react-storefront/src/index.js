@@ -3,7 +3,7 @@
  * Copyright © 2017-2018 Moov Corporation.  All rights reserved.
  */
 
-// @create-index {"ignore":["platform","registerServiceWorker","amp","launchClient","stats"]}
+// @create-index {"ignore":["platform","registerServiceWorker","amp","launchClient","stats","renderers","utils"]}
 
 export { default as Accordion } from './Accordion.js';
 export { default as ActionButton } from './ActionButton.js';
@@ -86,9 +86,7 @@ export { default as menu } from './menu';
 export { default as model } from './model';
 export { default as persist } from './persist.js';
 export { default as personal } from './personal';
-export { default as renderers } from './renderers.js';
 export { default as requestContext } from './requestContext.js';
 export { default as router } from './router';
-export { default as utils } from './utils';
 export { default as withStyleProps } from './withStyleProps.js';
 
