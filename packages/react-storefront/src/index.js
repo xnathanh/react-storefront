@@ -3,7 +3,7 @@
  * Copyright © 2017-2018 Moov Corporation.  All rights reserved.
  */
 
-// @create-index {"ignore":["platform","registerServiceWorker","amp","launchClient","stats","renderers","utils"]}
+// @create-index {"ignore":["platform","registerServiceWorker","amp","launchClient","stats","renderers","utils","Server"]}
 
 export { default as Accordion } from './Accordion.js';
 export { default as ActionButton } from './ActionButton.js';
@@ -59,7 +59,6 @@ export { default as SearchButton } from './SearchButton.js';
 export { default as SearchDrawer } from './SearchDrawer.js';
 export { default as SearchField } from './SearchField.js';
 export { default as SearchPopup } from './SearchPopup.js';
-export { default as Server } from './Server.js';
 export { default as ShowMore } from './ShowMore.js';
 export { default as Skeleton } from './Skeleton.js';
 export { default as SocialShareButtons } from './SocialShareButtons.js';
