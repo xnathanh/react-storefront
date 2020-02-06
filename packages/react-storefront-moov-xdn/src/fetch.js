@@ -57,10 +57,12 @@ const FORWARD_HEADERS = [
   // Apply user-agent header from the browser if one isn't explicitly set
   // This helps prevent synthetic APIs from getting blocked.
   'user-agent',
-
   // This is needed when using basic auth for both the PWA and the site used
   // for the synthetic API.
-  'authorization'
+  'authorization',
+  // Needed for keeping sessions alive, some sites rely on this to
+  // be constant during a session
+  'x-forwarded-for'
 ]
 
 /**
@@ -99,11 +101,18 @@ export function fetchWithCookies(url, options = {}, qsOptions) {
   const headers = {}
 
   if (env.cookie) {
-    if (Array.isArray(env.shouldSendCookies)) {
-      // send only those cookies that are included in the custom cache key (see router/cache.js)
-      headers.cookie = pickCookies(env.rsf_request.cookies, env.shouldSendCookies)
-    } else if (env.shouldSendCookies !== false) {
-      // will get here when the response is cached at edge without a custom cache key
+    if (env.shouldSendCookies === false || Array.isArray(env.shouldSendCookies)) {
+      // Only include cookies that are included in the custom cache key (see router/cache.js)
+      const cookiesToSend = !env.shouldSendCookies ? [] : [...env.shouldSendCookies]
+
+      // Always send moov_* cookies - these are needed to ensure that pwa requesting from the pwa doesnt get rebucketed under
+      // an A/B test or forcing the moov experience using a moov_* cookie
+      cookiesToSend.push(/^moov_.*/i)
+
+      const cookies = pickCookies(env.rsf_request.cookies, cookiesToSend)
+
+      headers.cookie = cookies
+    } else {
       headers.cookie = env.cookie
     }
   }
@@ -129,11 +138,24 @@ function pickCookies(fromCookies, names) {
   const cookies = []
 
   for (let name of names) {
-    const value = fromCookies[name]
+    const cookiesToInclude = []
 
-    if (value !== undefined) {
-      cookies.push(`${encodeURIComponent(name)}=${encodeURIComponent(fromCookies[name])}`)
+    if (name instanceof RegExp) {
+      // example: /moov_.*/
+      cookiesToInclude.push(...Object.keys(fromCookies).filter(cookie => name.test(cookie)))
+    } else {
+      // single cookie name
+      cookiesToInclude.push(name)
     }
+
+    // add each cookie that has a defined value
+    cookiesToInclude.forEach(name => {
+      const value = fromCookies[name]
+
+      if (value !== undefined) {
+        cookies.push(`${name}=${fromCookies[name]}`)
+      }
+    })
   }
 
   return cookies.join('; ')
@@ -235,6 +257,7 @@ export default function fetch(url, options = {}, qsOptions) {
             statusText: response.statusText,
             ok,
             headers: new Headers(response.headers),
+            requestHeaders: () => new Headers(requestOptions.headers),
             arrayBuffer: () => Promise.resolve(data),
             text: () => Promise.resolve(extractString(response, data)),
             json: () => Promise.resolve(JSON.parse(extractString(response, data))),

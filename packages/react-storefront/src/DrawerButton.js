@@ -7,14 +7,17 @@ import ActionButton from './ActionButton'
 import Drawer from './Drawer'
 import AmpDrawer from './amp/AmpDrawer'
 import AppContext from './AppContext'
+import PropTypes from 'prop-types'
 
 /**
  *
  * Example use:
  *
+ * ```js
  * <DrawerButton ampStateId="sizeChart" label="Open Size Chart">
  *   <CmsSlot>{product.sizeChartHtml}</CmsSlot>
  * </DrawerButton>
+ * ```
  *
  * The children components are rendered within the drawer content.
  *
@@ -29,7 +32,7 @@ import AppContext from './AppContext'
  */
 export default function DrawerButton({
   ampStateId,
-  anchor = 'bottom',
+  anchor,
   showCloseButton,
   closeButtonProps,
   children,
@@ -40,15 +43,19 @@ export default function DrawerButton({
   const {
     app: { amp }
   } = useContext(AppContext)
+
   const drawerProps = { showCloseButton, closeButtonProps, anchor }
-  // Make sure AMP state ID is never undefined
-  if (!ampStateId) ampStateId = props.label
+
   // This should be spread over any custom close buttons used within the content
   const customCloseButtonProps = {
     onClick: toggle,
+    role: 'button',
+    tabIndex: '0',
     on: `tap:AMP.setState({ ${ampStateId}: { open: false } })`
   }
+
   children = typeof children === 'function' ? children(customCloseButtonProps) : children
+
   if (amp) {
     const triggerOpen =
       anchor === 'left' || anchor === 'right'
@@ -72,4 +79,25 @@ export default function DrawerButton({
       </Drawer>
     </>
   )
+}
+
+DrawerButton.propTypes = {
+  /**
+   * The side from which the drawer will slide in.
+   */
+  anchor: PropTypes.oneOf(['left', 'top', 'right', 'bottom']),
+  /**
+   * Set to `false` to hide the close button.
+   */
+  showCloseButton: PropTypes.bool,
+  /**
+   * Props to pass to the close button.
+   */
+  closeButtonProps: PropTypes.object
+}
+
+DrawerButton.defaultProps = {
+  anchor: 'bottom',
+  showCloseButton: true,
+  ampStateId: 'drawerButton'
 }

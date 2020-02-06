@@ -30,7 +30,8 @@ export default function responseRewriter({
   router,
   blob,
   transform,
-  errorReporter = Function.prototype
+  errorReporter = Function.prototype,
+  sendPreloadHeaders = true
 }) {
   if (env.secure !== 'true') {
     // Always redirect on non-secure requests.
@@ -55,7 +56,8 @@ export default function responseRewriter({
       router,
       transform,
       errorReporter,
-      state: { mode }
+      state: { mode },
+      sendPreloadHeaders
     }).serve(request, response)
   }
 }

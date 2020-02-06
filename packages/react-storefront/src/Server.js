@@ -45,7 +45,8 @@ export default class Server {
     deferScripts = true,
     transform,
     errorReporter = Function.prototype,
-    state = {}
+    state = {},
+    sendPreloadHeaders = true
   }) {
     console.error = console.warn = console.log
 
@@ -57,7 +58,8 @@ export default class Server {
       deferScripts,
       transform,
       errorReporter,
-      state
+      state,
+      sendPreloadHeaders
     })
   }
 
@@ -69,7 +71,9 @@ export default class Server {
       console.error = console.error || console.log
       console.warn = console.warn || console.log
 
-      const history = createMemoryHistory({ initialEntries: [request.path + request.search] })
+      const history = createMemoryHistory({
+        initialEntries: [request.path + request.search]
+      })
 
       if (request.headers.get(ROUTES)) {
         return response.json(this.router.routes.map(route => route.path.spec))
@@ -185,7 +189,9 @@ export default class Server {
 
       // Set prefetch headers so that our scripts will be fetched
       // and loaded as fast as possible
-      response.set('link', scripts.map(renderPreloadHeader).join(', '))
+      if (this.sendPreloadHeaders) {
+        response.set('link', scripts.map(renderPreloadHeader).join(', '))
+      }
 
       html = `
         <!DOCTYPE html>
@@ -198,7 +204,10 @@ export default class Server {
             ${helmet.script.toString()}
           </head>
           <body ${helmet.bodyAttributes.toString()}>
-            ${await renderStyle({ registry: sheetsRegistry, id: 'ssr-css', minify: Boolean(amp) })}
+            ${await renderStyle({
+              registry: sheetsRegistry,
+              minify: Boolean(amp)
+            })}
             <noscript>
               You need to enable JavaScript to run this app.
             </noscript>
@@ -220,7 +229,11 @@ export default class Server {
       `
 
       if (typeof this.transform === 'function') {
-        html = await this.transform(html, { model, sheetsRegistry, helmet })
+        html = await this.transform(html, {
+          model,
+          sheetsRegistry,
+          helmet
+        })
       }
 
       if (amp && (!requestContext.get('amp-enabled') || !requestContext.get('amp-transformed'))) {

@@ -26,6 +26,31 @@ describe('createCustomCacheKey', () => {
     })
   })
 
+  it('should support header partitioning', () => {
+    const key = createCustomCacheKey()
+      .addHeader('x-moov-xdn-device')
+      .addHeader('country', header => {
+        header.partition('na').byPattern('us|ca')
+        header.partition('eur').byPattern('.*')
+      })
+
+    expect(key.toJSON()).toEqual({
+      query_parameters_list: [],
+      query_parameters_mode: 'blacklist',
+      add_cookies: {},
+      add_headers: [
+        'x-moov-xdn-device',
+        {
+          name: 'country',
+          partitions: [
+            { partition: 'na', partitioning_regex: 'us|ca' },
+            { partition: 'eur', partitioning_regex: '.*' }
+          ]
+        }
+      ]
+    })
+  })
+
   describe('query parameters exclusion', () => {
     it('can exclude all query parameters', () => {
       const key = createCustomCacheKey().excludeAllQueryParameters()
