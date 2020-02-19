@@ -13,6 +13,7 @@ import BottomDrawer from '../src/BottomDrawer'
 import Box from '../src/Box'
 import ButtonSelector from '../src/ButtonSelector'
 import CartButton from '../src/CartButton'
+import Carousel from '../src/Carousel'
 import CheckoutButton from '../src/CheckoutButton'
 import CmsSlot from '../src/CmsSlot'
 import Container from '../src/Container'
@@ -240,6 +241,18 @@ require('./Breadcrumbs.stories')
 storiesOf('CartButton', module)
   .addDecorator(wrapWithProvider())
   .addWithJSX('with default props', () => <CartButton />)
+
+storiesOf('Carousel', module)
+  .addDecorator(wrapWithProvider())
+  .addWithJSX('with infinite scroll', () => (
+    <Carousel infinite={true} indicators={true} slidesToShow={2}>
+      <div><div style={{ height: '300px', backgroundColor: 'red' }}></div></div>
+      <div><div style={{ height: '300px', backgroundColor: 'blue' }}></div></div>
+      <div><div style={{ height: '300px', backgroundColor: 'green' }}></div></div>
+      <div><div style={{ height: '300px', backgroundColor: 'yellow' }}></div></div>
+      <div><div style={{ height: '300px', backgroundColor: 'orange' }}></div></div>
+    </Carousel>
+  ))
 
 storiesOf('CheckoutButton', module)
   .addDecorator(wrapWithProvider())

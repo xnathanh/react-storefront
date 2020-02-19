@@ -66,6 +66,11 @@ export default class AmpCarousel extends Component {
     height: PropTypes.number,
 
     /**
+     * Width on carousel container, defaults to "auto"
+     */
+    width: PropTypes.number,
+
+    /**
      * AMP layout type, defaults to "fixed-height"
      */
     layout: PropTypes.string,
@@ -100,6 +105,7 @@ export default class AmpCarousel extends Component {
     arrows: true,
     indicators: false,
     height: 200,
+    width: 'auto',
     layout: 'fixed-height',
     ampStateProperty: 'selectedIndex',
     autoplay: false,
@@ -129,6 +135,7 @@ export default class AmpCarousel extends Component {
       style,
       children,
       height,
+      width,
       layout,
       ampStateProperty,
       autoplay,
@@ -150,6 +157,7 @@ export default class AmpCarousel extends Component {
         <amp-carousel
           controls
           height={height}
+          width={width}
           layout={layout}
           type={type}
           on={`slideChange:AMP.setState({ rsfCarousel: { ${ampStateProperty}: event.index } })`}
