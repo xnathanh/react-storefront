@@ -76,9 +76,10 @@ yarn release
 
 ## Changelog
 
-### 6.78.2 [diff](https://github.com/moovweb/react-storefront/compare/v6.78.1...v6.78.2)
+### 6.79.0 [diff](https://github.com/moovweb/react-storefront/compare/v6.78.1...v6.79.0)
 
 - Updated webpack plugin which caused copy error in client bundle
+- Added menuButtonRenderer prop to NavTab
 
 ### 6.78.1 [diff](https://github.com/moovweb/react-storefront/compare/v6.78.0...v6.78.1)
 
