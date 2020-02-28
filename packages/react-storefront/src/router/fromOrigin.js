@@ -6,10 +6,6 @@
 import transformParams from './transformParams'
 import proxyUpstream from './proxyUpstream'
 
-async function fn(params, request, response) {
-  throw new Error('fromOrigin is only supported when running in the Moovweb XDN.')
-}
-
 export default function fromOrigin(backend = 'origin') {
   const type = 'fromOrigin'
   const config = {
@@ -19,15 +15,12 @@ export default function fromOrigin(backend = 'origin') {
   }
   const runOn = { server: true, client: false }
 
-  if (process.env.MOOV_ENV === 'development') {
-    // perfect proxy in development since we have no CDN
-    return proxyUpstream()
-  }
-
   return {
+    ...proxyUpstream(),
     type,
-    runOn,
     config: () => config,
+
+    // note as of react-storefront-edge@4.0.0, this is no longer used but is kept here for backwards compatibility
     transformPath: path => {
       return {
         type,
@@ -35,10 +28,8 @@ export default function fromOrigin(backend = 'origin') {
         config: routePath => {
           config.proxy.rewrite_path_regex = transformParams(routePath, path)
           return config
-        },
-        fn
+        }
       }
-    },
-    fn
+    }
   }
 }

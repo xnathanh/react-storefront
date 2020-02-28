@@ -66,6 +66,11 @@ export default class AmpCarousel extends Component {
     height: PropTypes.number,
 
     /**
+     * Width on carousel container, defaults to "auto"
+     */
+    width: PropTypes.number,
+
+    /**
      * AMP layout type, defaults to "fixed-height"
      */
     layout: PropTypes.string,
@@ -88,18 +93,25 @@ export default class AmpCarousel extends Component {
     /**
      * Amount of pixels of spacing between each slide
      */
-    slideSpacing: PropTypes.number
+    slideSpacing: PropTypes.number,
+
+    /**
+     * AMP carousel type, defaults to "slides"
+     */
+    type: PropTypes.string
   }
 
   static defaultProps = {
     arrows: true,
     indicators: false,
     height: 200,
+    width: 'auto',
     layout: 'fixed-height',
     ampStateProperty: 'selectedIndex',
     autoplay: false,
     interval: 3000,
-    slideSpacing: 0
+    slideSpacing: 0,
+    type: 'slides'
   }
 
   renderDot(index) {
@@ -110,9 +122,7 @@ export default class AmpCarousel extends Component {
         className={classnames(classes.dot, {
           [classes.dotSelected]: index === 0
         })}
-        amp-bind={`class=>rsfCarousel.${ampStateProperty} == ${index} ? '${classes.dot} ${
-          classes.dotSelected
-        }' : '${classes.dot}'`}
+        amp-bind={`class=>rsfCarousel.${ampStateProperty} == ${index} ? '${classes.dot} ${classes.dotSelected}' : '${classes.dot}'`}
       />
     )
   }
@@ -125,11 +135,13 @@ export default class AmpCarousel extends Component {
       style,
       children,
       height,
+      width,
       layout,
       ampStateProperty,
       autoplay,
       interval,
-      slideSpacing
+      slideSpacing,
+      type
     } = this.props
 
     return (
@@ -145,8 +157,9 @@ export default class AmpCarousel extends Component {
         <amp-carousel
           controls
           height={height}
+          width={width}
           layout={layout}
-          type="slides"
+          type={type}
           on={`slideChange:AMP.setState({ rsfCarousel: { ${ampStateProperty}: event.index } })`}
           {...(autoplay ? { autoplay, delay: interval } : {})}
         >

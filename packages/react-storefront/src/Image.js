@@ -8,7 +8,7 @@ import PropTypes from 'prop-types'
 import { inject } from 'mobx-react'
 import classnames from 'classnames'
 import VisibilitySensor from 'react-visibility-sensor'
-import qs from 'qs'
+import { createOptimizedSrc } from './imageService'
 
 export const styles = theme => ({
   root: {
@@ -222,7 +222,12 @@ export default class Image extends Component {
           active={!loaded}
           onChange={this.lazyLoad}
           partialVisibility
-          offset={{ top: -lazyOffset, bottom: -lazyOffset }}
+          offset={{
+            top: -lazyOffset,
+            bottom: -lazyOffset,
+            left: -lazyOffset,
+            right: -lazyOffset
+          }}
         >
           {result}
         </VisibilitySensor>
@@ -254,13 +259,8 @@ export default class Image extends Component {
 
   getOptimizedSrc() {
     const { src, quality, optimize } = this.props
-
-    if (quality || Object.keys(optimize).length > 0) {
-      const options = { ...optimize, img: src }
-      if (quality) options.quality = quality
-      return `https://opt.moovweb.net/?${qs.stringify(options)}`
-    } else {
-      return src
-    }
+    const options = { ...optimize }
+    if (quality) options.quality = quality
+    return createOptimizedSrc(src, options)
   }
 }

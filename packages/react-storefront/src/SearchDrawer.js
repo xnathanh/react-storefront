@@ -198,7 +198,15 @@ export default class SearchDrawer extends Component {
     /**
      * AMP Thumbnail Image Height. Defaults to 120
      */
-    ampThumbnailHeight: PropTypes.number
+    ampThumbnailHeight: PropTypes.number,
+    /**
+     * Props to be applied to the underlying Drawer component
+     */
+    drawerProps: PropTypes.object,
+    /**
+     * Props to be applied to the underlying Input component
+     */
+    inputProps: PropTypes.object
   }
 
   static defaultProps = {
@@ -210,7 +218,12 @@ export default class SearchDrawer extends Component {
     searchFieldName: 'q',
     showClearButton: true,
     ampThumbnailWidth: 120,
-    ampThumbnailHeight: 120
+    ampThumbnailHeight: 120,
+    drawerProps: {
+      ModalProps: {
+        hideBackdrop: true
+      }
+    }
   }
 
   constructor({ search }) {
@@ -243,7 +256,8 @@ export default class SearchDrawer extends Component {
       showClearButton,
       searchURL,
       searchFieldName,
-      amp
+      amp,
+      inputProps
     } = this.props
 
     const HideWhenEmpty = ({ children }) => (
@@ -282,7 +296,8 @@ export default class SearchDrawer extends Component {
                     onFocus={this.onInputFocus}
                     onChange={e => this.onChangeSearchText(e.target.value)}
                     inputProps={{
-                      'amp-bind': 'value=>rsfSearchDrawer.searchText'
+                      'amp-bind': 'value=>rsfSearchDrawer.searchText',
+                      ...inputProps
                     }}
                     on="input-debounced:AMP.setState({ rsfSearchDrawer: { searchText: rsfSearchDrawer.___moov_submitting ? rsfSearchDrawer.searchText : event.value } })"
                     disableUnderline
@@ -331,7 +346,7 @@ export default class SearchDrawer extends Component {
   }
 
   render() {
-    const { classes, search, blurBackground, amp } = this.props
+    const { classes, search, blurBackground, amp, drawerProps } = this.props
 
     if (amp) {
       return <AmpSearchDrawer>{this.renderContent()}</AmpSearchDrawer>
@@ -345,9 +360,7 @@ export default class SearchDrawer extends Component {
             paper: blurBackground ? classes.paper : '',
             paperAnchorBottom: classes.paperAnchorBottom
           }}
-          ModalProps={{
-            hideBackdrop: true
-          }}
+          {...drawerProps}
         >
           {this.renderContent()}
         </Drawer>
