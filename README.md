@@ -79,6 +79,7 @@ yarn release
 ### 6.81.0 [diff](https://github.com/moovweb/react-storefront/compare/v6.80.0...v6.81.0)
 
 - Add `prevButtonProps` and `nextButtonProps` to `Carousel`.
+- Add `poster` attribute for videos in `<ImageSwitcher>`
 
 ### 6.80.0 [diff](https://github.com/moovweb/react-storefront/compare/v6.79.0...v6.80.0)
 

@@ -108,12 +108,12 @@ export const styles = theme => ({
 
 /**
  * An AMP-compatible image switcher with pinch and zoom.
- * 
+ *
  * This component relied on a special route to be implemented.
- * 
+ *
  * The `/images/{product.id}/{color.id}` handler should return data for
  * the AMP image switcher to update for a selected variant.
- * 
+ *
  * The data should follow this schema:
 
  ```js
@@ -124,13 +124,13 @@ export const styles = theme => ({
   selectedImage: 0
  }
  ```
- 
+
  * This is commonly used to provide different thumbnails for different
  * product colors.
- * 
+ *
  * An example of this handler is provided in the react-storefront-boilerplate
  * commercial branch in `/src/product/images-handler.js`.
- * 
+ *
  */
 @withStyles(styles, { name: 'RSFAmpImageSwitcher' })
 @inject('nextId', 'ampStateId', 'app')
@@ -291,9 +291,9 @@ export default class AmpImageSwitcher extends Component {
         <div className={classes.carouselWrap}>
           <BeforeInteracted>
             <Carousel>
-              {images.map(({ src, alt, video }) =>
+              {images.map(({ src, alt, video, poster }) =>
                 video ? (
-                  <Video src={src} alt={alt} key={src} />
+                  <Video src={src} alt={alt} key={src} poster={poster} />
                 ) : (
                   <amp-img key={src} src={src} layout="fill" alt={alt} />
                 )

@@ -503,10 +503,10 @@ export default class ImageSwitcher extends Component {
             index={selectedIndex}
             onChangeIndex={i => this.setState({ selectedIndex: i })}
           >
-            {images.map(({ src, alt, video }, i) => (
+            {images.map(({ src, alt, video, poster }, i) => (
               <div key={i} className={classes.imageWrap}>
                 {video ? (
-                  <Video src={src} alt={alt} />
+                  <Video src={src} alt={alt} poster={poster} />
                 ) : (
                   <Image
                     key={src}

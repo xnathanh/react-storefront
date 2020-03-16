@@ -122,7 +122,9 @@ export default class AmpCarousel extends Component {
         className={classnames(classes.dot, {
           [classes.dotSelected]: index === 0
         })}
-        amp-bind={`class=>rsfCarousel.${ampStateProperty} == ${index} ? '${classes.dot} ${classes.dotSelected}' : '${classes.dot}'`}
+        amp-bind={`class=>rsfCarousel.${ampStateProperty} == ${index} ? '${classes.dot} ${
+          classes.dotSelected
+        }' : '${classes.dot}'`}
       />
     )
   }

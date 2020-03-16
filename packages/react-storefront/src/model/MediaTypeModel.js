@@ -27,5 +27,9 @@ export default types.model('MediaType', {
   /**
    * A video URL
    */
-  video: types.optional(types.boolean, false)
+  video: types.optional(types.boolean, false),
+  /**
+   * Poster attribute for a video
+   */
+  poster: types.maybeNull(types.string)
 })
