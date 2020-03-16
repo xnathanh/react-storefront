@@ -76,6 +76,10 @@ yarn release
 
 ## Changelog
 
+### 6.81.0 [diff](https://github.com/moovweb/react-storefront/compare/v6.80.0...v6.81.0)
+
+- Add `prevButtonProps` and `nextButtonProps` to `Carousel`.
+
 ### 6.80.0 [diff](https://github.com/moovweb/react-storefront/compare/v6.79.0...v6.80.0)
 
 - Added an infinite scroll feature to the Carousel component, including `infinite`, `slideRenderer`, `slidesToShow`, and `swipeableViewsProps` props
