@@ -76,6 +76,10 @@ yarn release
 
 ## Changelog
 
+### 6.81.1 [diff](https://github.com/moovweb/react-storefront/compare/v6.81.0...v6.81.1)
+
+- Fixed `prevButtonProps` and `nextButtonProps` not being passed to `Carousel` render.
+
 ### 6.81.0 [diff](https://github.com/moovweb/react-storefront/compare/v6.80.0...v6.81.0)
 
 - Add `prevButtonProps` and `nextButtonProps` to `Carousel`.
