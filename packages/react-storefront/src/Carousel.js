@@ -262,7 +262,9 @@ export default class Carousel extends Component {
       direction,
       inset,
       slideSpacing,
-      swipeableViewsProps
+      swipeableViewsProps,
+      prevButtonProps,
+      nextButtonProps,
     } = this.props
 
     if (app.amp) return <AmpCarousel {...this.props} />
