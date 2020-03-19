@@ -2,7 +2,7 @@
  * @license
  * Copyright © 2017-2018 Moov Corporation.  All rights reserved.
  */
-import React, { Component } from 'react'
+import React, { Component, createRef } from 'react'
 import PropTypes from 'prop-types'
 import SwipeableViews from 'react-swipeable-views'
 import withStyles from '@material-ui/core/styles/withStyles'
@@ -12,6 +12,7 @@ import IconButton from '@material-ui/core/IconButton'
 import Portal from '@material-ui/core/Portal'
 import { fade } from '@material-ui/core/styles/colorManipulator'
 import classnames from 'classnames'
+import ReactImageMagnify from 'react-image-magnify'
 import { ReactPinchZoomPan } from 'react-pinch-zoom-pan'
 import TabsRow from './TabsRow'
 import analytics from './analytics'
@@ -21,6 +22,8 @@ import LoadMask from './LoadMask'
 import Image from './Image'
 import Video from './Video'
 import isEqual from 'lodash/isEqual'
+import get from 'lodash/get'
+import set from 'lodash/set'
 
 const paletteIconTextColor = '#77726D'
 
@@ -36,7 +39,7 @@ export const styles = theme => ({
     flexDirection: 'column',
     position: 'relative',
 
-    '& img': {
+    '& img.rsf-imageSwitcherImage': {
       display: 'block'
     }
   },
@@ -56,7 +59,7 @@ export const styles = theme => ({
     display: 'flex',
     justifyContent: 'center',
     alignItems: 'stretch',
-    '& img': {
+    '& img.rsf-imageSwitcherImage': {
       maxHeight: '100%',
       maxWidth: '100%',
       objectFit: 'contain'
@@ -292,6 +295,12 @@ export default class ImageSwitcher extends Component {
      */
     imageProps: PropTypes.object,
 
+    /**
+     * Props passed to the [`ReactImageMagnify`](https://github.com/ethanselzer/react-image-magnify#usage)
+     * element for an image when pan-to-zoom is enabled (via image `zoomWidth` + `zoomHeight` + `zoomSrc`).
+     */
+    magnifyProps: PropTypes.object,
+
     /*
      * Option to manually set the selected index
      */
@@ -466,7 +475,8 @@ export default class ImageSwitcher extends Component {
       loadingThumbnailProps,
       imageProps,
       viewerThumbnailsOnly,
-      notFoundSrc
+      notFoundSrc,
+      magnifyProps
     } = this.props
 
     const { fullSizeImagesLoaded, images, thumbnails } = this.state
@@ -494,6 +504,24 @@ export default class ImageSwitcher extends Component {
     const { selectedIndex, viewerActive } = this.state
     const selectedImage = images[selectedIndex]
     const SelectedImageTag = selectedImage.video ? 'video' : 'img'
+    magnifyProps = magnifyProps || {}
+    set(
+      magnifyProps,
+      'imageClassName',
+      classnames(get(magnifyProps, 'imageClassName'), 'rsf-imageSwitcherImage')
+    )
+    set(
+      magnifyProps,
+      'style',
+      { ...get(magnifyProps, 'style', {}), display: 'flex' }
+    )
+    set(
+      magnifyProps,
+      'enlargedImageStyle',
+      { ...get(magnifyProps, 'enlargedImageStyle', {}), height: '100%' }
+    )
+
+    const imageOnLoad = idx => idx === 0 ? this.onFullSizeImagesLoaded : () => {}
 
     return (
       <div className={classnames(className, classes.root)} style={style}>
@@ -503,17 +531,28 @@ export default class ImageSwitcher extends Component {
             index={selectedIndex}
             onChangeIndex={i => this.setState({ selectedIndex: i })}
           >
-            {images.map(({ src, alt, video, poster }, i) => (
+            {images.map(({ src, alt, video, poster, zoomSrc, zoomWidth, zoomHeight }, i) => (
               <div key={i} className={classes.imageWrap}>
                 {video ? (
                   <Video src={src} alt={alt} poster={poster} />
+                ) : zoomSrc && zoomWidth && zoomHeight ? (
+                  <ImageMagnify
+                    magnifyProps={magnifyProps}
+                    imageProps={imageProps}
+                    src={src}
+                    alt={alt}
+                    notFoundSrc={notFoundSrc}
+                    zoomSrc={zoomSrc}
+                    zoomWidth={zoomWidth}
+                    zoomHeight={zoomHeight}
+                    onLoad={imageOnLoad(i)}
+                  />
                 ) : (
                   <Image
-                    key={src}
                     notFoundSrc={notFoundSrc}
                     src={src}
                     alt={alt}
-                    onLoad={i === 0 ? this.onFullSizeImagesLoaded : null}
+                    onLoad={imageOnLoad(i)}
                     {...imageProps}
                   />
                 )}
@@ -636,6 +675,69 @@ export default class ImageSwitcher extends Component {
   onFullSizeImagesLoaded = () => {
     this.setState({ fullSizeImagesLoaded: true })
     this.props.app.applyState({ loadingProduct: null })
+  }
+}
+
+class ImageMagnify extends Component {
+  constructor() {
+    super()
+
+    this.state = {
+      primaryNotFound: false,
+      zoomPrimaryNotFound: false
+    }
+
+    this.ref = createRef()
+  }
+
+  componentDidMount() {
+    const img = this.ref.current
+
+    if (img && img.complete && img.naturalWidth === 0) {
+      this.setState({ primaryNotFound: true })
+    }
+  }
+
+  render() {
+    const { primaryNotFound, zoomPrimaryNotFound } = this.state
+
+    let { src, alt, zoomSrc, zoomWidth, zoomHeight, onLoad, notFoundSrc, magnifyProps, imageProps } = this.props;
+
+    if ((primaryNotFound || zoomPrimaryNotFound) && notFoundSrc) {
+      // if either is not found, just do a standard Image:
+      return (
+        <Image
+          notFoundSrc={notFoundSrc}
+          src={primaryNotFound ? notFoundSrc : src}
+          alt={alt}
+          onLoad={onLoad}
+          {...imageProps}
+        />
+      )
+    }
+
+    src = Image.getOptimizedSrc(src, get(imageProps, 'quality'), get(imageProps, 'optimize'))
+    zoomSrc = Image.getOptimizedSrc(zoomSrc, get(imageProps, 'quality'), get(imageProps, 'optimize'))
+
+    return (
+      <ReactImageMagnify
+        enlargedImagePosition="over"
+        {...magnifyProps}
+        smallImage={{
+          src,
+          alt: alt,
+          isFluidWidth: true,
+          onLoad: onLoad,
+          onError: () => this.setState({ primaryNotFound: true })
+        }}
+        largeImage={{
+          src: zoomSrc,
+          width: zoomWidth,
+          height: zoomHeight,
+          onError: () => this.setState({ zoomPrimaryNotFound: true })
+        }}
+      />
+    )
   }
 }
 
