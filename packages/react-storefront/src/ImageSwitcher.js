@@ -78,8 +78,37 @@ export const styles = theme => ({
     bottom: 0
   },
 
-  thumbs: {
+  bottomThumbs: {
     marginTop: `${theme.margins.container}px`
+  },
+
+  topThumbs: {
+    marginBottom: `${theme.margins.container}px`,
+    order: -1
+  },
+
+  leftThumbs: {
+    marginRight: `${theme.margins.container}px`,
+    order: -1
+  },
+
+  rightThumbs: {
+    marginLeft: `${theme.margins.container}px`
+  },
+
+  sideThumbs: {
+    flexDirection: 'row'
+  },
+
+  sideThumbTabs: {
+    flexDirection: 'column'
+  },
+
+  sideThumbTab: {
+    border: '2px solid transparent'
+  },
+  selectedSideThumbTab: {
+    border: `2px solid ${theme.palette.grey[400]}`
   },
 
   thumbnail: {
@@ -88,6 +117,10 @@ export const styles = theme => ({
     boxSizing: 'content-box',
     height: '50px',
     width: '50px'
+  },
+
+  sideThumbnail: {
+    padding: 3,
   },
 
   activeThumbs: {
@@ -291,6 +324,11 @@ export default class ImageSwitcher extends Component {
     thumbnailImageProps: PropTypes.object,
 
     /**
+     * Position of thumbnails, relative to the image viewer
+     */
+    thumbnailPosition: PropTypes.oneOf(['bottom', 'top', 'left', 'right']),
+
+    /**
      * Props to be added to the Image child components.
      */
     imageProps: PropTypes.object,
@@ -336,6 +374,7 @@ export default class ImageSwitcher extends Component {
     arrows: true,
     indicators: false,
     loadingThumbnailProps: {},
+    thumbnailPosition: 'bottom',
     imageProps: {},
     reactPinchZoomPanOptions: {
       maxScale: 3
@@ -413,7 +452,13 @@ export default class ImageSwitcher extends Component {
   }
 
   renderThumbnails() {
-    const { classes, thumbnailsTitle, notFoundSrc, thumbnailImageProps } = this.props
+    const {
+      classes,
+      thumbnailsTitle,
+      notFoundSrc,
+      thumbnailImageProps,
+      thumbnailPosition
+    } = this.props
     const { thumbnails } = this.state
     const modifiedThumbs = thumbnails && thumbnails.map(({ src, alt }) => ({ imageUrl: src, alt }))
     const { viewerActive, selectedIndex } = this.state
@@ -421,22 +466,41 @@ export default class ImageSwitcher extends Component {
     return (
       thumbnails &&
       thumbnails.length > 0 && (
-        <div className={classnames(classes.thumbs, { [classes.activeThumbs]: viewerActive })}>
+        <div
+          className={classnames(classes.thumbs, {
+            [classes.activeThumbs]: viewerActive,
+            [classes.leftThumbs]: !viewerActive && thumbnailPosition === 'left',
+            [classes.rightThumbs]: !viewerActive && thumbnailPosition === 'right',
+            [classes.topThumbs]: !viewerActive && thumbnailPosition === 'top',
+            [classes.bottomThumbs]: !viewerActive && thumbnailPosition === 'bottom'
+          })}
+        >
           <div className="field">
             <label className={classes.thumbsTitle}>{thumbnailsTitle}</label>
           </div>
           <TabsRow
             classes={{
               scroller: classes.tabScroller,
-              root: classes.tabsRowRoot
+              root: classnames(classes.tabsRowRoot, {
+                [classes.sideThumbTabs]: !viewerActive && ['left', 'right'].includes(thumbnailPosition)
+              }),
+              tab: classnames({
+                [classes.sideThumbTab]: !viewerActive && ['left', 'right'].includes(thumbnailPosition)
+              }),
+              selectedTab: classnames({
+                [classes.selectedSideThumbTab]: !viewerActive && ['left', 'right'].includes(thumbnailPosition)
+              })
             }}
             imageProps={{
-              className: classes.thumbnail,
+              className: classnames(classes.thumbnail, {
+                [classes.sideThumbnail]: !viewerActive && ['left', 'right'].includes(thumbnailPosition)
+              }),
               notFoundSrc,
               fill: true,
               ...thumbnailImageProps
             }}
             centered
+            orientation={!viewerActive && ['left', 'right'].includes(thumbnailPosition) ? 'vertical' : 'horizontal'}
             initialSelectedIdx={selectedIndex}
             onTabChange={(e, selectedIndex) =>
               this.setState({ selectedIndex, playingVideo: false })
@@ -476,7 +540,8 @@ export default class ImageSwitcher extends Component {
       imageProps,
       viewerThumbnailsOnly,
       notFoundSrc,
-      magnifyProps
+      magnifyProps,
+      thumbnailPosition
     } = this.props
 
     const { fullSizeImagesLoaded, images, thumbnails } = this.state
@@ -510,21 +575,21 @@ export default class ImageSwitcher extends Component {
       'imageClassName',
       classnames(get(magnifyProps, 'imageClassName'), 'rsf-imageSwitcherImage')
     )
-    set(
-      magnifyProps,
-      'style',
-      { ...get(magnifyProps, 'style', {}), display: 'flex' }
-    )
-    set(
-      magnifyProps,
-      'enlargedImageStyle',
-      { ...get(magnifyProps, 'enlargedImageStyle', {}), height: '100%' }
-    )
+    set(magnifyProps, 'style', { ...get(magnifyProps, 'style', {}), display: 'flex' })
+    set(magnifyProps, 'enlargedImageStyle', {
+      ...get(magnifyProps, 'enlargedImageStyle', {}),
+      height: '100%'
+    })
 
-    const imageOnLoad = idx => idx === 0 ? this.onFullSizeImagesLoaded : () => {}
+    const imageOnLoad = idx => (idx === 0 ? this.onFullSizeImagesLoaded : () => {})
 
     return (
-      <div className={classnames(className, classes.root)} style={style}>
+      <div
+        className={classnames(className, classes.root, {
+          [classes.sideThumbs]: ['left', 'right'].includes(thumbnailPosition)
+        })}
+        style={style}
+      >
         {/* Full Size Images */}
         <div className={classes.swipeWrap}>
           <SwipeableViews
@@ -701,7 +766,17 @@ class ImageMagnify extends Component {
   render() {
     const { primaryNotFound, zoomPrimaryNotFound } = this.state
 
-    let { src, alt, zoomSrc, zoomWidth, zoomHeight, onLoad, notFoundSrc, magnifyProps, imageProps } = this.props;
+    let {
+      src,
+      alt,
+      zoomSrc,
+      zoomWidth,
+      zoomHeight,
+      onLoad,
+      notFoundSrc,
+      magnifyProps,
+      imageProps
+    } = this.props
 
     if ((primaryNotFound || zoomPrimaryNotFound) && notFoundSrc) {
       // if either is not found, just do a standard Image:
@@ -717,7 +792,11 @@ class ImageMagnify extends Component {
     }
 
     src = Image.getOptimizedSrc(src, get(imageProps, 'quality'), get(imageProps, 'optimize'))
-    zoomSrc = Image.getOptimizedSrc(zoomSrc, get(imageProps, 'quality'), get(imageProps, 'optimize'))
+    zoomSrc = Image.getOptimizedSrc(
+      zoomSrc,
+      get(imageProps, 'quality'),
+      get(imageProps, 'optimize')
+    )
 
     return (
       <ReactImageMagnify

@@ -38,6 +38,48 @@ describe('ImageSwitcher', () => {
     ).toMatchSnapshot()
   })
 
+  it('should render thumbnails on top', () => {
+    expect(
+      mount(
+        <Provider>
+          <ImageSwitcher
+            images={['/a.jpg', '/b.jpg', '/c.jpg']}
+            thumbnails={['/at.jpg', '/bt.jpg', '/ct.jpg']}
+            thumbnailPosition="top"
+          />
+        </Provider>
+      )
+    ).toMatchSnapshot()
+  })
+
+  it('should render thumbnails on the left', () => {
+    expect(
+      mount(
+        <Provider>
+          <ImageSwitcher
+            images={['/a.jpg', '/b.jpg', '/c.jpg']}
+            thumbnails={['/at.jpg', '/bt.jpg', '/ct.jpg']}
+            thumbnailPosition="left"
+          />
+        </Provider>
+      )
+    ).toMatchSnapshot()
+  })
+
+  it('should render thumbnails on the right', () => {
+    expect(
+      mount(
+        <Provider>
+          <ImageSwitcher
+            images={['/a.jpg', '/b.jpg', '/c.jpg']}
+            thumbnails={['/at.jpg', '/bt.jpg', '/ct.jpg']}
+            thumbnailPosition="right"
+          />
+        </Provider>
+      )
+    ).toMatchSnapshot()
+  })
+
   it('should render arrows', () => {
     expect(
       mount(

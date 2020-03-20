@@ -36,6 +36,9 @@ export const styles = theme => ({
     fontWeight: 500,
     opacity: 1
   },
+  verticalSelected: {
+    border: `2px solid ${theme.palette.grey[500]}`
+  },
   scroller: {
     '&::-webkit-scrollbar': {
       display: 'none'
@@ -52,6 +55,9 @@ export const styles = theme => ({
       content: "''",
       flex: 1
     }
+  },
+  vertical: {
+    flexDirection: 'column'
   }
 })
 
@@ -105,6 +111,11 @@ export default class TabsRow extends Component {
     centered: PropTypes.bool,
 
     /**
+     * Determines whether to show the tabs horizontally or vertically
+     */
+    orientation: PropTypes.oneOf(['horizontal', 'vertical']),
+
+    /**
      * A function to override the default rendering of each tab's label.  The function is passed the MenuItem model
      * corresponding to the item to be rendered.
      */
@@ -114,6 +125,7 @@ export default class TabsRow extends Component {
   static defaultProps = {
     items: [],
     variant: 'scrollable',
+    orientation: 'horizontal',
     centered: false
   }
 
@@ -157,6 +169,7 @@ export default class TabsRow extends Component {
       initialSelectedIdx,
       onTabChange,
       elevation,
+      orientation,
       ...tabsProps
     } = this.props
     const { selectedIdx } = this.state
@@ -170,8 +183,13 @@ export default class TabsRow extends Component {
         className={classes.root}
         classes={{
           root: classes.root,
-          indicator: classnames(classes.indicator, { [classes.noSelection]: selectedIdx == null }),
-          flexContainer: classnames({ [classes.centered]: centered }),
+          indicator: classnames(classes.indicator, {
+            [classes.noSelection]: selectedIdx == null || orientation === 'vertical'
+          }),
+          flexContainer: classnames({
+            [classes.centered]: centered,
+            [classes.vertical]: orientation === 'vertical'
+          }),
           scroller: classes.scroller
         }}
         {...tabsProps}
