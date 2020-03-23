@@ -4,11 +4,12 @@ on:
   release:
     types: [published]
 
-#jobs:
-#  publish-npm:
-#    runs-on: ubuntu-latest
-#    steps:
-#      - uses: actions/checkout@v1
+jobs:
+  publish-npm:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@vw
+        run: echo Publish script to come.
 #      - uses: actions/setup-node@v1
 #        with:
 #          node-version: 12
