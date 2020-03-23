@@ -112,19 +112,19 @@ exports[`ImageSwitcher should render AmpImageSwitcher when amp=true 1`] = `
             <WithStyles(inject-ImageSwitcher-with-app) product={{...}} images={{...}}>
               <inject-ImageSwitcher-with-app product={{...}} images={{...}} classes={{...}}>
                 <ImageSwitcher product={{...}} images={{...}} classes={{...}} app={{...}} thumbnails={{...}} viewerThumbnailsOnly={false} arrows={true} indicators={false} loadingThumbnailProps={{...}} thumbnailPosition="bottom" imageProps={{...}} reactPinchZoomPanOptions={{...}}>
-                  <WithStyles(inject-AmpImageSwitcher-with-nextId-ampStateId-app) product={{...}} images={{...}} className={[undefined]} classes={{...}} arrows={true} indicators={false} thumbnails={{...}}>
-                    <inject-AmpImageSwitcher-with-nextId-ampStateId-app product={{...}} images={{...}} className={[undefined]} arrows={true} indicators={false} thumbnails={{...}} classes={{...}}>
-                      <AmpImageSwitcher product={{...}} images={{...}} className={[undefined]} arrows={true} indicators={false} thumbnails={{...}} classes={{...}} nextId={[Function: nextId]} ampStateId="moovAmpState" app={{...}} type="slides" ampStateProperty="selectedImage">
-                        <div className="RSFAmpImageSwitcher-root-620 RSFImageSwitcher-root-585 RSFAmpImageSwitcher-rootImportant-621">
+                  <WithStyles(inject-AmpImageSwitcher-with-nextId-ampStateId-app) product={{...}} images={{...}} className={[undefined]} classes={{...}} arrows={true} indicators={false} thumbnails={{...}} thumbnailPosition="bottom">
+                    <inject-AmpImageSwitcher-with-nextId-ampStateId-app product={{...}} images={{...}} className={[undefined]} arrows={true} indicators={false} thumbnails={{...}} thumbnailPosition="bottom" classes={{...}}>
+                      <AmpImageSwitcher product={{...}} images={{...}} className={[undefined]} arrows={true} indicators={false} thumbnails={{...}} thumbnailPosition="bottom" classes={{...}} nextId={[Function: nextId]} ampStateId="moovAmpState" app={{...}} type="slides" ampStateProperty="selectedImage">
+                        <div className="RSFAmpImageSwitcher-root-620 RSFImageSwitcher-root-585 RSFAmpImageSwitcher-rootImportant-622">
                           <HelmetWrapper defer={true} encodeSpecialCharacters={true}>
                             <SideEffect(NullComponent) defer={true} encodeSpecialCharacters={true} script={{...}}>
                               <NullComponent defer={true} encodeSpecialCharacters={true} script={{...}} />
                             </SideEffect(NullComponent)>
                           </HelmetWrapper>
                           <amp-state id="moovAmpState" amp-bind="src=>moovAmpState.colorInteracted ? \\'/images//\\' + moovAmpState.color.selected.id + \\'.json\\' : null" />
-                          <div className="RSFAmpImageSwitcher-carouselWrap-622">
+                          <div className="RSFAmpImageSwitcher-carouselWrap-623">
                             <BeforeInteracted>
-                              <div amp-bind="class=>moovAmpState.colorInteracted ? \\'RSFAmpImageSwitcher-hidden-631\\' : \\'\\'">
+                              <div amp-bind="class=>moovAmpState.colorInteracted ? \\'RSFAmpImageSwitcher-hidden-637\\' : \\'\\'" className="undefined">
                                 <Carousel>
                                   <amp-carousel controls={true} id="1" lightbox={true} layout="fill" type="slides" loop={true} amp-bind="slide=> moovAmpState.selectedImage" on="slideChange:AMP.setState({ moovAmpState: { selectedImage: event.index } })">
                                     <amp-img src="/a.jpg" layout="fill" alt={{...}} />
@@ -135,7 +135,7 @@ exports[`ImageSwitcher should render AmpImageSwitcher when amp=true 1`] = `
                               </div>
                             </BeforeInteracted>
                             <AfterInteracted>
-                              <div className="RSFAmpImageSwitcher-hidden-631" amp-bind="class=>!moovAmpState.colorInteracted ? \\'RSFAmpImageSwitcher-hidden-631\\' : \\'\\'">
+                              <div className="RSFAmpImageSwitcher-hidden-637" amp-bind="class=>!moovAmpState.colorInteracted ? \\'RSFAmpImageSwitcher-hidden-637\\' : \\'\\'">
                                 <Template items="." single-item={true}>
                                   <amp-list layout="fill" src="/images//000000.json" amp-bind="src=>\\'/images//\\' + moovAmpState.color.selected.id + \\'.json\\'" items="." single-item={true}>
                                     <template type="amp-mustache">
@@ -151,7 +151,7 @@ exports[`ImageSwitcher should render AmpImageSwitcher when amp=true 1`] = `
                                                     <NullComponent defer={true} encodeSpecialCharacters={true} script={{...}} />
                                                   </SideEffect(NullComponent)>
                                                 </HelmetWrapper>
-                                                <amp-video class="RSFVideo-root-632" src="{{src}}" layout="fill" alt="{{alt}}" controls={true} />
+                                                <amp-video class="RSFVideo-root-638" src="{{src}}" layout="fill" alt="{{alt}}" controls={true} />
                                               </Video>
                                             </inject-Video>
                                           </WithStyles(inject-Video)>
@@ -201,19 +201,19 @@ exports[`ImageSwitcher should render AmpImageSwitcher without product colors 1`]
             <WithStyles(inject-ImageSwitcher-with-app) product={{...}} images={{...}}>
               <inject-ImageSwitcher-with-app product={{...}} images={{...}} classes={{...}}>
                 <ImageSwitcher product={{...}} images={{...}} classes={{...}} app={{...}} thumbnails={{...}} viewerThumbnailsOnly={false} arrows={true} indicators={false} loadingThumbnailProps={{...}} thumbnailPosition="bottom" imageProps={{...}} reactPinchZoomPanOptions={{...}}>
-                  <WithStyles(inject-AmpImageSwitcher-with-nextId-ampStateId-app) product={{...}} images={{...}} className={[undefined]} classes={{...}} arrows={true} indicators={false} thumbnails={{...}}>
-                    <inject-AmpImageSwitcher-with-nextId-ampStateId-app product={{...}} images={{...}} className={[undefined]} arrows={true} indicators={false} thumbnails={{...}} classes={{...}}>
-                      <AmpImageSwitcher product={{...}} images={{...}} className={[undefined]} arrows={true} indicators={false} thumbnails={{...}} classes={{...}} nextId={[Function: nextId]} ampStateId="moovAmpState" app={{...}} type="slides" ampStateProperty="selectedImage">
-                        <div className="RSFAmpImageSwitcher-root-668 RSFImageSwitcher-root-633 RSFAmpImageSwitcher-rootImportant-669">
+                  <WithStyles(inject-AmpImageSwitcher-with-nextId-ampStateId-app) product={{...}} images={{...}} className={[undefined]} classes={{...}} arrows={true} indicators={false} thumbnails={{...}} thumbnailPosition="bottom">
+                    <inject-AmpImageSwitcher-with-nextId-ampStateId-app product={{...}} images={{...}} className={[undefined]} arrows={true} indicators={false} thumbnails={{...}} thumbnailPosition="bottom" classes={{...}}>
+                      <AmpImageSwitcher product={{...}} images={{...}} className={[undefined]} arrows={true} indicators={false} thumbnails={{...}} thumbnailPosition="bottom" classes={{...}} nextId={[Function: nextId]} ampStateId="moovAmpState" app={{...}} type="slides" ampStateProperty="selectedImage">
+                        <div className="RSFAmpImageSwitcher-root-674 RSFImageSwitcher-root-639 RSFAmpImageSwitcher-rootImportant-676">
                           <HelmetWrapper defer={true} encodeSpecialCharacters={true}>
                             <SideEffect(NullComponent) defer={true} encodeSpecialCharacters={true} script={{...}}>
                               <NullComponent defer={true} encodeSpecialCharacters={true} script={{...}} />
                             </SideEffect(NullComponent)>
                           </HelmetWrapper>
                           <amp-state id="moovAmpState" amp-bind="src=>moovAmpState.colorInteracted ? \\'/images//\\' + moovAmpState.color.selected.id + \\'.json\\' : null" />
-                          <div className="RSFAmpImageSwitcher-carouselWrap-670">
+                          <div className="RSFAmpImageSwitcher-carouselWrap-677">
                             <BeforeInteracted>
-                              <div amp-bind="class=>moovAmpState.colorInteracted ? \\'RSFAmpImageSwitcher-hidden-679\\' : \\'\\'">
+                              <div amp-bind="class=>moovAmpState.colorInteracted ? \\'RSFAmpImageSwitcher-hidden-691\\' : \\'\\'" className="undefined">
                                 <Carousel>
                                   <amp-carousel controls={true} id="1" lightbox={true} layout="fill" type="slides" loop={true} amp-bind="slide=> moovAmpState.selectedImage" on="slideChange:AMP.setState({ moovAmpState: { selectedImage: event.index } })">
                                     <amp-img src="/a.jpg" layout="fill" alt={{...}} />
@@ -224,7 +224,7 @@ exports[`ImageSwitcher should render AmpImageSwitcher without product colors 1`]
                               </div>
                             </BeforeInteracted>
                             <AfterInteracted>
-                              <div className="RSFAmpImageSwitcher-hidden-679" amp-bind="class=>!moovAmpState.colorInteracted ? \\'RSFAmpImageSwitcher-hidden-679\\' : \\'\\'">
+                              <div className="RSFAmpImageSwitcher-hidden-691" amp-bind="class=>!moovAmpState.colorInteracted ? \\'RSFAmpImageSwitcher-hidden-691\\' : \\'\\'">
                                 <Template items="." single-item={true}>
                                   <amp-list layout="fill" src="/images//000000.json" amp-bind="src=>\\'/images//\\' + moovAmpState.color.selected.id + \\'.json\\'" items="." single-item={true}>
                                     <template type="amp-mustache">
@@ -240,7 +240,7 @@ exports[`ImageSwitcher should render AmpImageSwitcher without product colors 1`]
                                                     <NullComponent defer={true} encodeSpecialCharacters={true} script={{...}} />
                                                   </SideEffect(NullComponent)>
                                                 </HelmetWrapper>
-                                                <amp-video class="RSFVideo-root-680" src="{{src}}" layout="fill" alt="{{alt}}" controls={true} />
+                                                <amp-video class="RSFVideo-root-692" src="{{src}}" layout="fill" alt="{{alt}}" controls={true} />
                                               </Video>
                                             </inject-Video>
                                           </WithStyles(inject-Video)>
