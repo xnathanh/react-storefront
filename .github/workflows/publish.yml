@@ -8,8 +8,7 @@ jobs:
   publish-npm:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@vw
-        run: echo Publish script to come.
+      - run: echo Publish script to come.
 #      - uses: actions/setup-node@v1
 #        with:
 #          node-version: 12
