@@ -57,7 +57,9 @@ export const styles = theme => ({
     }
   },
   vertical: {
-    flexDirection: 'column'
+    [theme.breakpoints.up('sm')]: {
+      flexDirection: 'column'
+    }
   }
 })
 

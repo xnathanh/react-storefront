@@ -88,16 +88,28 @@ export const styles = theme => ({
   },
 
   leftThumbs: {
-    marginRight: `${theme.margins.container}px`,
+    [theme.breakpoints.down('xs')]: {
+      marginTop: `${theme.margins.container}px`
+    },
+    [theme.breakpoints.up('sm')]: {
+      marginRight: `${theme.margins.container}px`
+    },
     order: -1
   },
 
   rightThumbs: {
-    marginLeft: `${theme.margins.container}px`
+    [theme.breakpoints.down('xs')]: {
+      marginTop: `${theme.margins.container}px`
+    },
+    [theme.breakpoints.up('sm')]: {
+      marginLeft: `${theme.margins.container}px`
+    }
   },
 
   sideThumbs: {
-    flexDirection: 'row'
+    [theme.breakpoints.up('sm')]: {
+      flexDirection: 'row'
+    }
   },
 
   sideThumbTabs: {
@@ -120,7 +132,7 @@ export const styles = theme => ({
   },
 
   sideThumbnail: {
-    padding: 3,
+    padding: 3
   },
 
   activeThumbs: {
@@ -462,6 +474,7 @@ export default class ImageSwitcher extends Component {
     const { thumbnails } = this.state
     const modifiedThumbs = thumbnails && thumbnails.map(({ src, alt }) => ({ imageUrl: src, alt }))
     const { viewerActive, selectedIndex } = this.state
+    const isVertical = ['left', 'right'].includes(thumbnailPosition)
 
     return (
       thumbnails &&
@@ -482,25 +495,25 @@ export default class ImageSwitcher extends Component {
             classes={{
               scroller: classes.tabScroller,
               root: classnames(classes.tabsRowRoot, {
-                [classes.sideThumbTabs]: !viewerActive && ['left', 'right'].includes(thumbnailPosition)
+                [classes.sideThumbTabs]: !viewerActive && isVertical
               }),
               tab: classnames({
-                [classes.sideThumbTab]: !viewerActive && ['left', 'right'].includes(thumbnailPosition)
+                [classes.sideThumbTab]: !viewerActive && isVertical
               }),
               selectedTab: classnames({
-                [classes.selectedSideThumbTab]: !viewerActive && ['left', 'right'].includes(thumbnailPosition)
+                [classes.selectedSideThumbTab]: !viewerActive && isVertical
               })
             }}
             imageProps={{
               className: classnames(classes.thumbnail, {
-                [classes.sideThumbnail]: !viewerActive && ['left', 'right'].includes(thumbnailPosition)
+                [classes.sideThumbnail]: !viewerActive && isVertical
               }),
               notFoundSrc,
               fill: true,
               ...thumbnailImageProps
             }}
             centered
-            orientation={!viewerActive && ['left', 'right'].includes(thumbnailPosition) ? 'vertical' : 'horizontal'}
+            orientation={!viewerActive && isVertical ? 'vertical' : 'horizontal'}
             initialSelectedIdx={selectedIndex}
             onTabChange={(e, selectedIndex) =>
               this.setState({ selectedIndex, playingVideo: false })
@@ -562,6 +575,7 @@ export default class ImageSwitcher extends Component {
           arrows={arrows}
           indicators={indicators}
           thumbnails={viewerThumbnailsOnly ? null : thumbnails}
+          thumbnailPosition={thumbnailPosition}
         />
       )
     }
